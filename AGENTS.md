@@ -12,29 +12,33 @@ katafract.com marketing site. Static HTML pages for the Katafract/Enclave produc
 - Color palette: cyan `#00F0FF`, magenta `#FF006E`, dark navy background
 - No npm, no build tools, no framework
 
+## Site Structure
+
+**See `STRUCTURE.md`** for the authoritative reference: product status (live/planned), App Store IDs, per-page inventory, SEO checklist, and the full content update checklist. Update STRUCTURE.md whenever a product goes live or an App Store ID changes.
+
 ## Key Pages
 
 | File | Purpose |
 |---|---|
 | `index.html` | Landing page — hero, philosophy, product overview, CTA |
-| `enclave.html` | Enclave product page (Haven DNS + Veil VPN bundle) |
+| `enclave.html` | Enclave product page |
 | `dns.html` | Haven DNS setup guide with tabs (iPhone / Mac / Android) |
 | `pricing.html` | Pricing tiers with monthly/annual toggle, Stripe integration |
-| `about.html` | Company story, philosophy, app portfolio (DocArmor, ExifArmor, ParkArmor, Wraith) |
+| `about.html` | Company story, philosophy, app portfolio |
 | `support.html` | Support page |
 | `privacy.html` | Privacy policy |
 | `terms.html` | Terms of service |
-| `canary.html` | Warrant canary |
+| `canary.html` | Warrant canary (updated monthly by bot) |
 
 ## How to Deploy
 
-No build step. Copy files directly to the static serving path:
+Push to `main` — GitHub Actions deploys to Cloudflare Pages (`katafract-web`) automatically in ~30s.
 
 ```bash
-rsync -av --delete . artemis:/opt/katafract-platform/apps/client-portal/
+git add -A && git commit -m "..." && git push
 ```
 
-nginx on artemis serves `apps/client-portal/` as static files for `connect.katafract.com`. Cloudflare proxies katafract.com.
+CF Pages project: `katafract-web`. Account ID: `bab9d8a1edbf2d5f4882c4452534c860`.
 
 ## Asset Structure
 
