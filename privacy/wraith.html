@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Privacy Policy — WraithVPN by Katafract</title>
-  <meta name="description" content="WraithVPN strict no-log privacy policy. We never log your traffic, DNS queries, browsing history, or real IP address.">
+  <title>Privacy Policy — Enclave VPN by Katafract</title>
+  <meta name="description" content="Enclave VPN strict no-log privacy policy. We never log your traffic, DNS queries, browsing history, or real IP address.">
   <link rel="canonical" href="https://katafract.com/privacy/wraith">
-  <meta property="og:title" content="Privacy Policy — WraithVPN by Katafract">
+  <meta property="og:title" content="Privacy Policy — Enclave VPN by Katafract">
   <meta property="og:description" content="Strict no-log policy. No traffic logs, no DNS logs, no browsing history, no real IP stored.">
   <meta property="og:url" content="https://katafract.com/privacy/wraith">
   <meta property="og:type" content="website">
@@ -30,13 +30,13 @@
   </nav>
   <main class="prose-page">
     <div class="prose-header">
-      <p class="prose-eyebrow">WraithVPN &mdash; Privacy Policy</p>
-      <h1>WraithVPN Privacy Policy</h1>
+      <p class="prose-eyebrow">Enclave VPN &mdash; Privacy Policy</p>
+      <h1>Enclave VPN Privacy Policy</h1>
       <p class="prose-meta">Katafract LLC &mdash; Last updated April 2026 &mdash; <a href="/privacy.html">All app policies &rarr;</a></p>
     </div>
     <div class="prose-body">
-      <div class="callout"><p><strong>Plain English:</strong> WraithVPN does not log your traffic, DNS queries, browsing history, connection times, or real IP address. We collect only what is needed to operate your account: email, subscription tier, device label, and assigned tunnel IP. Node health data (CPU, memory, disk) is about our servers &mdash; not your activity.</p></div>
-      <h2>What Data Does WraithVPN Collect?</h2>
+      <div class="callout"><p><strong>Plain English:</strong> Enclave VPN does not log your traffic, DNS queries, browsing history, connection times, or real IP address. We collect only what is needed to operate your account: email, subscription tier, device label, and assigned tunnel IP. Node health data (CPU, memory, disk) is about our servers &mdash; not your activity.</p></div>
+      <h2>What Data Does Enclave VPN Collect?</h2>
       <table class="data-table">
         <thead><tr><th>Data Type</th><th>Collected?</th></tr></thead>
         <tbody>
@@ -55,13 +55,13 @@
         </tbody>
       </table>
       <h2>Strict No-Log Policy</h2>
-      <p>We do not inspect, log, cache, or store any content passing through our VPN tunnels. DNS queries are handled on-node by AdGuard Home (Haven DNS) and are never persisted to disk or sent to our control plane. Your real IP is never recorded &mdash; external services see only the shared exit IP of the WraithGate node you connected to. WireGuard handshakes, session start/end times, and connection metadata are not logged.</p>
+      <p>We do not inspect, log, cache, or store any content passing through our VPN tunnels. DNS queries are handled on-node by AdGuard Home (Haven DNS) and are never persisted to disk or sent to our control plane. Your real IP is never recorded &mdash; external services see only the shared exit IP of the Enclave node you connected to. WireGuard handshakes, session start/end times, and connection metadata are not logged.</p>
       <h2>WireGuard Protocol and Session Keys</h2>
-      <p>WraithVPN uses WireGuard with Curve25519 key exchange, ChaCha20 encryption, and Poly1305 authentication. Session keys are ephemeral &mdash; generated fresh per session and discarded on disconnect. Keys are never logged or reused. Packet metadata is processed in kernel memory and never written to disk.</p>
+      <p>Enclave VPN uses WireGuard with Curve25519 key exchange, ChaCha20 encryption, and Poly1305 authentication. Session keys are ephemeral &mdash; generated fresh per session and discarded on disconnect. Keys are never logged or reused. Packet metadata is processed in kernel memory and never written to disk.</p>
       <h2>Haven DNS Protection</h2>
-      <p>Haven DNS (powered by AdGuard Home) runs on every WraithGate node. DNS queries are resolved locally on the node and are never forwarded to our control plane. We do not log, store, or analyze individual DNS queries. Aggregate blocklist statistics (cluster-wide, not per-user) may be collected for capacity planning only. Blocklists: AdGuard DNS Filter + OISD Full.</p>
+      <p>Haven DNS (powered by AdGuard Home) runs on every Enclave node. DNS queries are resolved locally on the node and are never forwarded to our control plane. We do not log, store, or analyze individual DNS queries. Aggregate blocklist statistics (cluster-wide, not per-user) may be collected for capacity planning only. Blocklists: AdGuard DNS Filter + OISD Full.</p>
       <h2>Node Health Diagnostics</h2>
-      <p>WraithGate nodes send a heartbeat to our control plane every 30 seconds containing: CPU %, memory %, disk %, and aggregate fail2ban event count. This is <strong>infrastructure data about our servers, not about user activity.</strong> It does not include active user counts, per-user bandwidth, connection logs, or any user-identifying information. Node health data is retained in a rolling 90-day window, then purged.</p>
+      <p>Enclave nodes send a heartbeat to our control plane every 30 seconds containing: CPU %, memory %, disk %, and aggregate fail2ban event count. This is <strong>infrastructure data about our servers, not about user activity.</strong> It does not include active user counts, per-user bandwidth, connection logs, or any user-identifying information. Node health data is retained in a rolling 90-day window, then purged.</p>
       <h2>Account and Identity</h2>
       <p>Accounts are managed by Zitadel (our Sigil identity platform). We store your email, hashed password (bcrypt, never recoverable), subscription tier, account creation timestamp, and device records. We do not store your real IP, connection history, or payment method details.</p>
       <h2>Payments and Billing</h2>
@@ -75,10 +75,10 @@
         <li><strong>Traffic and connection logs:</strong> not generated &mdash; nothing to retain</li>
       </ul>
       <h2>International Data Transfers and GDPR</h2>
-      <p>Katafract LLC is a US entity. Account data is processed on US servers. WraithGate nodes operate in Germany, Finland, Singapore, and the United States. EU users may select EU exit nodes to minimize data residency outside the EEA.</p>
+      <p>Katafract LLC is a US entity. Account data is processed on US servers. Enclave nodes operate in Germany, Finland, Singapore, and the United States. EU users may select EU exit nodes to minimize data residency outside the EEA.</p>
       <p>EU users have the right to access, erasure, portability, rectification, and objection under GDPR. Legal basis: contract (Article 6(1)(b)) for account data; legitimate interest (Article 6(1)(f)) for node health data; legal obligation (Article 6(1)(c)) for payment records. To exercise your rights, contact <a href="mailto:privacy@katafract.com">privacy@katafract.com</a>.</p>
       <h2>Children&rsquo;s Privacy</h2>
-      <p>WraithVPN is not intended for users under 13. We do not knowingly collect data from children. Contact <a href="mailto:privacy@katafract.com">privacy@katafract.com</a> to remove any child account.</p>
+      <p>Enclave VPN is not intended for users under 13. We do not knowingly collect data from children. Contact <a href="mailto:privacy@katafract.com">privacy@katafract.com</a> to remove any child account.</p>
       <h2>Changes to This Policy</h2>
       <p>Material changes will be posted at this URL with an updated date. We will email you if changes materially expand data collection or weaken privacy protections.</p>
       <h2>Contact</h2>
