@@ -110,6 +110,18 @@
       .app-hero { padding: 7rem 5rem 5rem; }
       .app-main { padding: 0 5rem 8rem; }
     }
+
+    .qr-demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1.25rem; margin: 2rem 0 1rem; }
+    .qr-demo-card { background: rgba(10,10,20,0.5); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem 1.25rem 1.25rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; transition: border-color 0.2s; }
+    .qr-demo-card:hover { border-color: rgba(255,255,255,0.12); }
+    .qr-demo-card img { width: 130px; height: 130px; border-radius: 0.5rem; display: block; }
+    .qr-demo-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.22rem 0.7rem; border-radius: 999px; }
+    .qr-badge-safe    { background: rgba(52,211,153,0.1);  border: 1px solid rgba(52,211,153,0.3);  color: #34D399; }
+    .qr-badge-neutral { background: rgba(148,163,184,0.1); border: 1px solid rgba(148,163,184,0.25); color: #94A3B8; }
+    .qr-badge-medium  { background: rgba(251,191,36,0.1);  border: 1px solid rgba(251,191,36,0.3);  color: #FBBF24; }
+    .qr-badge-high    { background: rgba(239,68,68,0.1);   border: 1px solid rgba(239,68,68,0.3);   color: #EF4444; }
+    .qr-demo-dest { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--dim); word-break: break-all; text-align: center; }
+    .qr-demo-result { font-size: 0.8rem; color: var(--dim); line-height: 1.5; text-align: center; }
     @media (max-width: 480px) {
       .app-hero { padding: 3rem 1.25rem 2.5rem; }
       .app-main { padding: 0 1.25rem 4rem; }
@@ -269,6 +281,42 @@
           <h3>Spend a credit when it matters</h3>
           <p>Tap AI Summary to spend 1 credit on a server-side summary of the destination, or tap Open Safely to view the page through Katafract&rsquo;s privacy relay in an isolated session. Both keep your device&rsquo;s IP off the destination&rsquo;s logs.</p>
         </div>
+      </div>
+    </div>
+
+
+    <hr class="section-divider">
+
+    <div style="margin-bottom:0.5rem">
+      <div class="app-section-label">Try it yourself</div>
+      <h2 class="app-section-title">Four QR codes, four outcomes</h2>
+      <p class="app-section-sub">Scan any of these with SafeOpen to see how the app evaluates links before you open them.</p>
+    </div>
+
+    <div class="qr-demo-grid">
+      <div class="qr-demo-card">
+        <img src="https://connect.katafract.com/safeopen-qr-safe.png" alt="Safe QR code — apple.com">
+        <span class="qr-demo-badge qr-badge-safe">Safe</span>
+        <div class="qr-demo-dest">apple.com</div>
+        <div class="qr-demo-result">HTTPS, well-known domain — green indicator, clean preview.</div>
+      </div>
+      <div class="qr-demo-card">
+        <img src="https://connect.katafract.com/safeopen-qr-neutral.png" alt="Neutral QR code — example.com">
+        <span class="qr-demo-badge qr-badge-neutral">Neutral</span>
+        <div class="qr-demo-dest">example.com</div>
+        <div class="qr-demo-result">HTTPS, placeholder domain — no risk flags, neutral indicator.</div>
+      </div>
+      <div class="qr-demo-card">
+        <img src="https://connect.katafract.com/safeopen-qr-medium.png" alt="Medium risk QR code — bit.ly shortener">
+        <span class="qr-demo-badge qr-badge-medium">Caution</span>
+        <div class="qr-demo-dest">bit.ly/3example</div>
+        <div class="qr-demo-result">URL shortener — destination hidden. Yellow caution, shortener flag.</div>
+      </div>
+      <div class="qr-demo-card">
+        <img src="https://connect.katafract.com/safeopen-qr-risky.png" alt="High risk QR code — malware test URL">
+        <span class="qr-demo-badge qr-badge-high">High Risk</span>
+        <div class="qr-demo-dest">malware.testing.google.test</div>
+        <div class="qr-demo-result">Google Safe Browsing malware test — HTTP, flagged domain. Red warning.</div>
       </div>
     </div>
 
