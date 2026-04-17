@@ -236,6 +236,32 @@
     <a href="/dns.html" style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#4ADE80">Setup guide →</a>
   </div>
 
+  <!-- Vaultyx comparison -->
+  <div class="compare-table">
+    <h2>Vaultyx vs Competitors</h2>
+    <p style="text-align:center;color:#8C94A6;font-size:.9rem;margin-bottom:2rem;">Sovereign includes Vaultyx with 1TB storage, plus VPN, DNS, and DocArmor</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th style="color:#FF006E">Vaultyx</th>
+          <th style="color:#8C94A6">iCloud+</th>
+          <th style="color:#8C94A6">Dropbox</th>
+          <th style="color:#8C94A6">Google One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Client-side encryption</td><td class="yes-mag">AES-256-GCM</td><td class="no">Server-side only</td><td class="no">Server-side only</td><td class="no">Server-side only</td></tr>
+        <tr><td>Can provider read files?</td><td class="yes-mag">Never — we have no keys</td><td class="no">Yes, Apple can</td><td class="no">Yes, Dropbox can</td><td class="no">Yes, Google can</td></tr>
+        <tr><td>Content scanning (CSAM/AI)</td><td class="yes-mag">None</td><td class="no">CSAM scanning on upload</td><td class="no">Malware scanning</td><td class="no">AI training on content</td></tr>
+        <tr><td>Delta sync (FastCDC)</td><td class="yes-mag">Only changed chunks</td><td class="no">Full re-upload</td><td class="yes">Yes, but proprietary</td><td class="no">Full re-upload</td></tr>
+        <tr><td>VPN routing integration</td><td class="yes-mag">Auto routes via WraithVPN</td><td class="no">None</td><td class="no">None</td><td class="no">None</td></tr>
+        <tr><td>Lock-in risk</td><td class="yes-mag">Standard S3 export</td><td class="no">Proprietary format</td><td class="no">Proprietary format</td><td class="no">Proprietary format</td></tr>
+        <tr><td>1TB monthly price</td><td class="yes-mag">$19.99 (inc. VPN+DNS)</td><td class="no">$9.99</td><td class="no">$11.99</td><td class="no">$9.99</td></tr>
+      </tbody>
+    </table>
+  </div>
+
   <!-- Feature comparison -->
   <div class="compare-table">
     <h2>Full comparison</h2>
