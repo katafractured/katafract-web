@@ -96,7 +96,7 @@
     <h1>Your IDs, <em>encrypted</em>,<br>on your device</h1>
     <p class="tagline">Your driver&rsquo;s license, insurance cards, and passport are probably sitting unencrypted in your camera roll right now &mdash; syncing to iCloud, visible in shared albums. DocArmor scans, encrypts, and locks them behind Face ID. Nothing ever leaves your phone.</p>
     <div class="coming-soon-badge">
-      &#x1F511; Planned &mdash; follow <a href="/" style="color:#E879F9;margin-left:0.25rem">katafract.com</a>&nbsp;for updates
+      &#x1F511; Free on the App Store &mdash; add <a href="/apps/vaultyx.html" style="color:#E879F9;margin-left:0.25rem">Sovereign</a>&nbsp;to back up to the cloud
     </div>
   </div>
 
@@ -127,9 +127,9 @@
         <div class="feature-desc">Your vault locks when you leave the app and requires biometric authentication to reopen. DocArmor never sees your biometric data &mdash; only iOS does.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">&#x2601;&#xFE0F;&#x20E0;</div>
-        <div class="feature-title">No iCloud Sync</div>
-        <div class="feature-desc">iCloud sync is explicitly disabled for all vault data. Your documents do not appear in iCloud Drive, iCloud Backup, or any cloud service.</div>
+        <div class="feature-icon">&#x2601;&#xFE0F;</div>
+        <div class="feature-title">Optional Cloud Backup</div>
+        <div class="feature-desc">Add a Sovereign subscription (through Vaultyx) and DocArmor can back up to Katafract&rsquo;s zero-knowledge Shards S3 &mdash; encrypted on-device, never visible to us. Off by default, off on iCloud, off on Apple.</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon">&#x1F4C2;</div>
@@ -146,31 +146,33 @@
     <hr class="section-divider">
 
     <div class="privacy-block">
-      <h2>&#x1F512; End-to-end local encryption</h2>
-      <p>DocArmor stores your documents encrypted with AES-256. The key is in the iOS Keychain, bound to your device and biometrics. Katafract has no server-side copy of anything &mdash; there are no servers at all.</p>
+      <h2>&#x1F512; Zero-knowledge by default</h2>
+      <p>DocArmor encrypts every document with AES-256 before it touches disk. The key is in the iOS Keychain, bound to your device and biometrics. Without Sovereign, there are no servers at all &mdash; Katafract never sees your vault.</p>
+      <p>If you turn on Sovereign cloud backup, files are re-encrypted locally with a Sovereign-derived key and uploaded as opaque chunks to Shards S3. Katafract still can&rsquo;t read them &mdash; the encryption happens on your device, before upload.</p>
       <p>Apple Privacy Nutrition Label: <strong>Data Not Collected.</strong></p>
       <div class="privacy-pills">
-        <span class="privacy-pill">AES-256 encrypted</span>
+        <span class="privacy-pill">AES-256 on-device</span>
         <span class="privacy-pill">Face ID protected</span>
+        <span class="privacy-pill">Cloud backup opt-in</span>
+        <span class="privacy-pill">Zero-knowledge Shards</span>
         <span class="privacy-pill">No iCloud sync</span>
-        <span class="privacy-pill">No accounts</span>
-        <span class="privacy-pill">No network calls</span>
       </div>
     </div>
 
     <hr class="section-divider">
 
     <div class="callout">
-      <p><strong>$3.99 &mdash; one-time, full app, no tiers.</strong> DocArmor is a single purchase that unlocks everything. No free tier, no upgrade prompts. A permanent license tied to your Apple ID, restorable on any device. Because your vault is encrypted locally and never backed up to iCloud, <strong>uninstalling the app permanently deletes all vault contents</strong> &mdash; export anything important before uninstalling. Refunds are handled by Apple at <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a>.</p>
+      <p><strong>DocArmor is free.</strong> Download it, scan your IDs, keep them encrypted on your device &mdash; no account, no subscription, no tier wall. Every feature works offline. Because your vault is encrypted locally, <strong>uninstalling the app permanently deletes all vault contents</strong> &mdash; export anything important before uninstalling.</p>
+      <p style="margin-top:0.75rem"><strong>Want cloud backup across devices?</strong> Add <a href="/apps/vaultyx.html" style="color:#E879F9">Sovereign</a> ($14.99/mo or $119.99/yr, purchased in Vaultyx) and DocArmor gains encrypted cloud sync through Katafract Shards. Same zero-knowledge promise &mdash; encryption happens before upload.</p>
       <p style="margin-top:0.75rem;margin-bottom:0"><a href="/terms/docarmor.html">Full Terms of Service &rarr;</a></p>
     </div>
 
     <hr class="section-divider">
 
     <div style="text-align:center;padding:1rem 0 2rem">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--dim2);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.75rem">Planned</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--text);margin-bottom:0.5rem">$3.99 &middot; one-time &middot; no subscription</div>
-      <div style="font-size:0.875rem;color:var(--dim)">iOS &mdash; iPhone</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--dim2);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.75rem">On the App Store</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--text);margin-bottom:0.5rem">Free &middot; iOS &middot; iPhone &amp; iPad</div>
+      <div style="font-size:0.875rem;color:var(--dim)">Optional cloud backup via Sovereign in <a href="/apps/vaultyx.html" style="color:#E879F9">Vaultyx</a></div>
     </div>
 
   </main>
