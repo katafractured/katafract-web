@@ -81,7 +81,7 @@
         "@type": "Offer",
         "priceCurrency": "USD",
         "price": "8.00",
-        "url": "https://buy.stripe.com/TODO_ENCLAVE_MONTHLY",
+        "url": "https://buy.stripe.com/28E3cv0tH2qK5EK4kUffy0j",
         "billingDuration": "P1M",
         "pricingPattern": "Subscription"
       },
@@ -89,7 +89,7 @@
         "@type": "Offer",
         "priceCurrency": "USD",
         "price": "64.00",
-        "url": "https://buy.stripe.com/TODO_ENCLAVE_ANNUAL",
+        "url": "https://buy.stripe.com/aFaaEXgsFghA8QWcRqffy0k",
         "billingDuration": "P1Y",
         "pricingPattern": "Subscription"
       }
@@ -105,7 +105,7 @@
         "@type": "Offer",
         "priceCurrency": "USD",
         "price": "18.00",
-        "url": "https://buy.stripe.com/TODO_SOVEREIGN_MONTHLY",
+        "url": "https://buy.stripe.com/7sY9ATekx1mG2sydVuffy0h",
         "billingDuration": "P1M",
         "pricingPattern": "Subscription"
       },
@@ -113,7 +113,7 @@
         "@type": "Offer",
         "priceCurrency": "USD",
         "price": "144.00",
-        "url": "https://buy.stripe.com/TODO_SOVEREIGN_ANNUAL",
+        "url": "https://buy.stripe.com/8x228ra4h1mGaZ4dVuffy0i",
         "billingDuration": "P1Y",
         "pricingPattern": "Subscription"
       }
@@ -267,7 +267,7 @@
         <li><span class="check" style="color:#FF006E">✓</span> Praetor (when shipping) + all future apps</li>
         <li><span class="check" style="color:#FF006E">✓</span> Unlimited devices · Cross-device sync</li>
       </ul>
-      <a href="https://buy.stripe.com/TODO_SOVEREIGN_MONTHLY" <!-- TODO: replace with real buy.stripe.com payment link; see memory project_pricing_platform_v2.md Stripe IDs -->" class="plan-cta primary" id="cta-sovereign">Get Sovereign →</a>
+      <a href="https://buy.stripe.com/7sY9ATekx1mG2sydVuffy0h"  class="plan-cta primary" id="cta-sovereign">Get Sovereign →</a>
     </div>
 
   </div>
@@ -415,14 +415,12 @@
 <script>
   let billing = 'monthly';
   const monthlyLinks = {
-    haven: 'https://buy.stripe.com/aFa7sLekx8P8aZ47x6ffy06',
     enclave: 'https://buy.stripe.com/bJe28r4JX9TcgjocRqffy04',
-    sovereign: 'https://buy.stripe.com/TODO_SOVEREIGN_MONTHLY" <!-- TODO: replace with real buy.stripe.com payment link; see memory project_pricing_platform_v2.md Stripe IDs -->'
+    sovereign: 'https://buy.stripe.com/7sY9ATekx1mG2sydVuffy0h'
   };
   const annualLinks = {
-    haven: 'https://buy.stripe.com/00wcN55O1aXgffkg3Cffy07',
     enclave: 'https://buy.stripe.com/9B600jfoB9Tcd7cbNmffy05',
-    sovereign: 'https://buy.stripe.com/TODO_SOVEREIGN_ANNUAL" <!-- TODO: replace with real buy.stripe.com payment link; see memory project_pricing_platform_v2.md Stripe IDs -->'
+    sovereign: 'https://buy.stripe.com/8x228ra4h1mGaZ4dVuffy0i'
   };
 
   function setBilling(mode) {
@@ -434,8 +432,6 @@
 
     document.querySelectorAll('.monthly-price').forEach(el => el.style.display = mode === 'monthly' ? '' : 'none');
     document.querySelectorAll('.annual-price').forEach(el => el.style.display = mode === 'annual' ? '' : 'none');
-
-    document.getElementById('cta-haven').href = mode === 'annual' ? annualLinks.haven : monthlyLinks.haven;
     document.getElementById('cta-enclave').href = mode === 'annual' ? annualLinks.enclave : monthlyLinks.enclave;    document.getElementById('cta-sovereign').href = mode === 'annual' ? annualLinks.sovereign : monthlyLinks.sovereign;
   }
 
