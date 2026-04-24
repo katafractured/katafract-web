@@ -1,0 +1,275 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Narrow decide-and-buy page. For deep comparison use /pricing.
+// Payment Link URLs ship verbatim — no Stripe session API call needed.
+// iOS users buy inside the app, not here.
+
+const PLANS = {
+  enclave: {
+    name: 'Enclave',
+    accent: '#00F0FF',
+    tagline: 'WraithVPN + Haven DNS. All utility apps unlocked. 50 AI credits / month.',
+    features: [
+      'WraithVPN single-hop across EU / US / APAC exit nodes',
+      'Haven DNS (ad + tracker blocking)',
+      'ExifArmor, ParkArmor, DocArmor, SafeOpen — all unlocked',
+      '5 devices',
+      '50 AI credits per month',
+    ],
+    monthly: { price: 8, url: 'https://buy.stripe.com/bJe28r4JX9TcgjocRqffy04' },
+    annual:  { price: 64, url: 'https://buy.stripe.com/9B600jfoB9Tcd7cbNmffy05', saves: '33%' },
+  },
+  sovereign: {
+    name: 'Sovereign',
+    accent: '#FF006E',
+    tagline: 'Everything in Enclave + multi-hop VPN + 1 TB Vaultyx encrypted storage.',
+    features: [
+      'Everything in Enclave',
+      'Multi-hop VPN (two regions, neither sees both ID + activity)',
+      'Vaultyx encrypted storage — 1 TB included',
+      'MeritMosaic unlimited',
+      'Every future Katafract app',
+      'Priority support',
+      '100 AI credits per month',
+    ],
+    monthly: { price: 18, url: 'https://buy.stripe.com/7sY9ATekx1mG2sydVuffy0h' },
+    annual:  { price: 144, url: 'https://buy.stripe.com/8x228ra4h1mGaZ4dVuffy0i', saves: '33%' },
+  },
+};
+---
+<Base
+  title={`Buy Enclave or Sovereign — Katafract`}
+  description={`Pick a tier, pick monthly or annual, subscribe via Stripe. iOS users subscribe inside the app.`}
+  section="home"
+>
+  <link slot="head" rel="stylesheet" href="/style.css" />
+  <style slot="head" is:global set:html={`
+    .buy-page { padding: 6rem 1.5rem 5rem; max-width: 1000px; margin: 0 auto; }
+    .buy-hero { text-align: center; margin-bottom: 3rem; }
+    .buy-hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem; color: #FF006E;
+      letter-spacing: .25em; text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .buy-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      font-weight: 700; line-height: 1.1;
+      margin-bottom: .75rem; color: #EBF0F7;
+    }
+    .buy-hero p {
+      color: #8C94A6; font-size: 1rem; line-height: 1.65;
+      max-width: 560px; margin: 0 auto;
+    }
+
+    /* Billing toggle */
+    .billing-toggle {
+      display: flex; justify-content: center; margin: 2rem 0 2.5rem;
+      gap: 1rem; align-items: center;
+    }
+    .toggle-pill {
+      display: inline-flex; background: rgba(10,10,20,0.7);
+      border: 1px solid rgba(100,100,120,0.25); border-radius: 999px; padding: 4px;
+    }
+    .toggle-btn {
+      font-family: 'JetBrains Mono', monospace; font-size: .78rem;
+      padding: .55rem 1.25rem; border-radius: 999px;
+      background: transparent; color: #8C94A6; cursor: pointer;
+      border: none; transition: all .2s;
+      font-weight: 500; letter-spacing: .04em;
+    }
+    .toggle-btn.active { background: #00F0FF; color: #050510; }
+    .save-badge {
+      font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+      color: #4ADE80; letter-spacing: .08em;
+      opacity: 0; transition: opacity .2s;
+    }
+    .save-badge.visible { opacity: 1; }
+
+    /* Plan grid */
+    .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; }
+    .plan {
+      background: linear-gradient(180deg, rgba(10,10,20,0.8), rgba(14,14,28,0.8));
+      border: 1px solid rgba(100,100,120,0.15);
+      border-radius: 20px; padding: 2rem;
+      display: flex; flex-direction: column;
+      transition: border-color .2s, transform .2s;
+    }
+    .plan:hover { transform: translateY(-2px); }
+    .plan.enclave:hover { border-color: rgba(0,240,255,0.4); }
+    .plan.sovereign:hover { border-color: rgba(255,0,110,0.4); }
+    .plan-label {
+      font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+      letter-spacing: .2em; text-transform: uppercase;
+      margin-bottom: .75rem;
+    }
+    .plan-label.enclave { color: #00F0FF; }
+    .plan-label.sovereign { color: #FF006E; }
+    .plan h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 700;
+      margin-bottom: .4rem; color: #EBF0F7;
+    }
+    .plan-tagline { color: #8C94A6; font-size: .9rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    .plan-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem; font-weight: 700;
+      color: #EBF0F7; line-height: 1; margin-bottom: .35rem;
+    }
+    .plan-price .unit {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .9rem; color: #8C94A6; font-weight: 500;
+      margin-left: .4rem; letter-spacing: .04em;
+    }
+    .plan-annual-equiv {
+      font-size: .78rem; color: #4a5060;
+      margin-bottom: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .plan-features { list-style: none; margin: 0 0 2rem; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
+    .plan-features li {
+      font-size: .88rem; color: #c0c8d8;
+      line-height: 1.5; padding-left: 1.4rem;
+      position: relative;
+    }
+    .plan-features li::before {
+      content: '✓'; position: absolute; left: 0;
+      font-weight: 600;
+    }
+    .plan.enclave .plan-features li::before { color: #00F0FF; }
+    .plan.sovereign .plan-features li::before { color: #FF006E; }
+
+    .plan-cta {
+      display: block; text-align: center; text-decoration: none;
+      padding: 1rem; border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace; font-size: .85rem; font-weight: 600;
+      letter-spacing: .04em; transition: transform .15s, box-shadow .15s, opacity .15s;
+      margin-top: auto;
+    }
+    .plan.enclave .plan-cta {
+      background: #00F0FF; color: #050510;
+    }
+    .plan.sovereign .plan-cta {
+      background: linear-gradient(135deg, #FF006E, #c7005a); color: #fff;
+    }
+    .plan-cta:hover { transform: translateY(-1px); text-decoration: none; box-shadow: 0 6px 24px rgba(0,240,255,0.25); }
+    .plan.sovereign .plan-cta:hover { box-shadow: 0 6px 24px rgba(255,0,110,0.3); }
+
+    .ios-note {
+      margin: 3rem auto 0; max-width: 640px; text-align: center;
+      padding: 1.25rem 1.5rem;
+      background: rgba(0,240,255,0.04);
+      border: 1px solid rgba(0,240,255,0.15);
+      border-radius: 12px;
+    }
+    .ios-note p {
+      font-size: .9rem; color: #c0c8d8; line-height: 1.65;
+    }
+    .ios-note a { color: #00F0FF; }
+
+    .secondary-links {
+      margin-top: 2.5rem; text-align: center;
+      display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
+      font-family: 'JetBrains Mono', monospace; font-size: .78rem;
+    }
+    .secondary-links a { color: #8C94A6; text-decoration: none; }
+    .secondary-links a:hover { color: #00F0FF; }
+
+    @media (max-width: 640px) {
+      .plan-price { font-size: 2.4rem; }
+      .plan { padding: 1.5rem; }
+    }
+  `}></style>
+
+  <main class="buy-page">
+    <div class="buy-hero">
+      <div class="buy-hero-eyebrow">Subscribe</div>
+      <h1>Pick your tier, subscribe via Stripe.</h1>
+      <p>Stripe Checkout is where desktop / Linux / Windows / Android / router buyers start. iOS buyers subscribe inside the WraithVPN app.</p>
+    </div>
+
+    <div class="billing-toggle">
+      <div class="toggle-pill" role="tablist" aria-label="Billing period">
+        <button class="toggle-btn active" id="btn-monthly" onclick="setBilling('monthly')" role="tab" aria-selected="true">Monthly</button>
+        <button class="toggle-btn" id="btn-annual" onclick="setBilling('annual')" role="tab" aria-selected="false">Annual</button>
+      </div>
+      <span class="save-badge" id="save-badge">Save 33%</span>
+    </div>
+
+    <div class="plans">
+      {Object.entries(PLANS).map(([key, plan]) => (
+        <div class={`plan ${key}`}>
+          <div class={`plan-label ${key}`}>{plan.name}</div>
+          <h2>{plan.name}</h2>
+          <p class="plan-tagline">{plan.tagline}</p>
+
+          <div class="plan-price">
+            $<span class="price-value" data-plan={key}>{plan.monthly.price}</span>
+            <span class="unit" data-plan={key}>/ month</span>
+          </div>
+          <div class="plan-annual-equiv" data-plan={key} style="visibility:hidden">
+            ≈ ${(plan.monthly.price * 12)} / year if billed monthly
+          </div>
+
+          <ul class="plan-features">
+            {plan.features.map(f => <li>{f}</li>)}
+          </ul>
+
+          <a
+            class="plan-cta plausible-event-name=Buy+Click"
+            data-plan={key}
+            data-url-monthly={plan.monthly.url}
+            data-url-annual={plan.annual.url}
+            data-plausible-event-tier={key}
+            data-plausible-event-period="monthly"
+            href={plan.monthly.url}
+          >
+            Subscribe to {plan.name} →
+          </a>
+        </div>
+      ))}
+    </div>
+
+    <div class="ios-note">
+      <p>
+        <strong>iPhone / iPad?</strong> Don't buy here. Download <strong>WraithVPN</strong> from the App Store and subscribe inside the app — your Apple ID handles payment, cancelations, and family sharing.
+      </p>
+    </div>
+
+    <div class="secondary-links">
+      <a href="/pricing">Full pricing + feature comparison →</a>
+      <a href="/welcome">I just paid — how do I use it? →</a>
+      <a href="/support">Support</a>
+    </div>
+  </main>
+
+  <script slot="head" is:inline>
+    function setBilling(period) {
+      const isMonthly = period === 'monthly';
+      document.getElementById('btn-monthly').classList.toggle('active', isMonthly);
+      document.getElementById('btn-annual').classList.toggle('active', !isMonthly);
+      document.getElementById('btn-monthly').setAttribute('aria-selected', isMonthly);
+      document.getElementById('btn-annual').setAttribute('aria-selected', !isMonthly);
+      document.getElementById('save-badge').classList.toggle('visible', !isMonthly);
+
+      const prices = { enclave: { monthly: 8, annual: 64 }, sovereign: { monthly: 18, annual: 144 } };
+      document.querySelectorAll('.price-value').forEach(el => {
+        const plan = el.getAttribute('data-plan');
+        el.textContent = prices[plan][period];
+      });
+      document.querySelectorAll('.unit').forEach(el => {
+        el.textContent = isMonthly ? '/ month' : '/ year';
+      });
+      document.querySelectorAll('.plan-annual-equiv').forEach(el => {
+        el.style.visibility = isMonthly ? 'hidden' : 'visible';
+      });
+      document.querySelectorAll('.plan-cta').forEach(el => {
+        const url = el.getAttribute(isMonthly ? 'data-url-monthly' : 'data-url-annual');
+        el.setAttribute('href', url);
+        el.setAttribute('data-plausible-event-period', period);
+      });
+    }
+  </script>
+</Base>
