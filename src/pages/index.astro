@@ -317,8 +317,8 @@ import Base from '../layouts/Base.astro';
     <h1 class="fd">Your own<br><em>Enclave</em>.</h1>
     <p>You don't connect to the internet. You operate inside your own Enclave. Haven DNS, WraithVPN, Vaultyx cloud storage — one privacy perimeter, operated end-to-end by Katafract.</p>
     <div class="hero-actions">
-      <a href="/dns" class="btn-primary">Set up Haven free <span>→</span></a>
-      <a href="/pricing" class="btn-ghost">See Enclave plans</a>
+      <a href="/dns" class="btn-primary plausible-event-name=Haven+Setup+Click">Set up Haven free <span>→</span></a>
+      <a href="/pricing" class="btn-ghost plausible-event-name=Pricing+Nav plausible-event-source=home-hero">See Enclave plans</a>
     </div>
   </div>
   <div class="hero-scroll"><div class="hero-scroll-line"></div></div>
@@ -369,7 +369,7 @@ import Base from '../layouts/Base.astro';
     <div class="app-list fade-up fade-up-d1">
 
       <!-- ExifArmor -->
-      <div class="app-card" data-app="0" style="--app-color:#00F0FF">
+      <div class="app-card plausible-event-name=App+Card+Click plausible-event-app=exifarmor" data-app="0" style="--app-color:#00F0FF">
         <div class="app-card-header">
           <div class="app-icon" style="background:rgba(0,240,255,.05);border-color:rgba(0,240,255,.15);color:#00F0FF">🛡️</div>
           <div class="app-meta">
@@ -418,7 +418,7 @@ import Base from '../layouts/Base.astro';
       </div>
 
       <!-- ParkArmor -->
-      <div class="app-card" data-app="1">
+      <div class="app-card plausible-event-name=App+Card+Click plausible-event-app=parkarmor" data-app="1">
         <div class="app-card-header">
           <div class="app-icon" style="background:rgba(74,222,128,.05);border-color:rgba(74,222,128,.15);color:#4ADE80">📍</div>
           <div class="app-meta">
@@ -467,7 +467,7 @@ import Base from '../layouts/Base.astro';
       </div>
 
       <!-- DocArmor -->
-      <div class="app-card" data-app="2">
+      <div class="app-card plausible-event-name=App+Card+Click plausible-event-app=docarmor" data-app="2">
         <div class="app-card-header">
           <div class="app-icon" style="background:rgba(232,121,249,.05);border-color:rgba(232,121,249,.15);color:#E879F9">🔐</div>
           <div class="app-meta">
@@ -513,7 +513,7 @@ import Base from '../layouts/Base.astro';
       </div>
 
       <!-- SafeOpen -->
-      <div class="app-card" data-app="3">
+      <div class="app-card plausible-event-name=App+Card+Click plausible-event-app=safeopen" data-app="3">
         <div class="app-card-header">
           <div class="app-icon" style="background:rgba(249,115,22,.05);border-color:rgba(249,115,22,.15);color:#F97316">🔍</div>
           <div class="app-meta">
@@ -562,7 +562,7 @@ import Base from '../layouts/Base.astro';
       </div>
 
       <!-- Vaultyx -->
-      <div class="app-card" data-app="4">
+      <div class="app-card plausible-event-name=App+Card+Click plausible-event-app=vaultyx" data-app="4">
         <div class="app-card-header">
           <div class="app-icon" style="background:rgba(255,0,110,.05);border-color:rgba(255,0,110,.15);color:#FF006E">☁️</div>
           <div class="app-meta">
@@ -634,8 +634,8 @@ import Base from '../layouts/Base.astro';
           <div style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:#8C94A6"><span style="color:#FF006E">✓</span> 5 devices</div>
           <div style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:#8C94A6"><span style="color:#FF006E">✓</span> All utility apps unlocked</div>
         </div>
-        <a href="/pricing" style="display:inline-block;padding:.6rem 1.25rem;background:linear-gradient(135deg,rgba(255,0,110,.2),rgba(255,0,110,.1));border:1px solid rgba(255,0,110,.4);border-radius:8px;color:#FF006E;font-size:.85rem;font-family:'JetBrains Mono',monospace">View plans →</a>
-        <a href="/enclave" style="display:block;margin-top:.75rem;color:#8C94A6;font-size:.85rem;border-bottom:1px solid rgba(100,100,120,.3);padding-bottom:2px;width:fit-content">Learn more →</a>
+        <a href="/pricing" class="plausible-event-name=Subscribe+Click plausible-event-tier=enclave" style="display:inline-block;padding:.6rem 1.25rem;background:linear-gradient(135deg,rgba(255,0,110,.2),rgba(255,0,110,.1));border:1px solid rgba(255,0,110,.4);border-radius:8px;color:#FF006E;font-size:.85rem;font-family=\'JetBrains Mono\',monospace">View plans →</a>
+        <a href="/enclave"> style="display:block;margin-top:.75rem;color:#8C94A6;font-size:.85rem;border-bottom:1px solid rgba(100,100,120,.3);padding-bottom:2px;width:fit-content">Learn more →</a>
       </div>
 
       <!-- Sovereign -->
@@ -653,7 +653,7 @@ import Base from '../layouts/Base.astro';
           <div style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:#8C94A6"><span style="color:#FF006E">✓</span> All future apps included</div>
           <div style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:#8C94A6"><span style="color:#FF006E">✓</span> Priority support</div>
         </div>
-        <a href="/pricing" style="display:inline-block;padding:.6rem 1.25rem;background:linear-gradient(135deg,rgba(255,0,110,.2),rgba(255,0,110,.1));border:1px solid rgba(255,0,110,.4);border-radius:8px;color:#FF006E;font-size:.85rem;font-family:'JetBrains Mono',monospace">View plans →</a>
+        <a href="/pricing" class="plausible-event-name=Subscribe+Click plausible-event-tier=sovereign" style="display:inline-block;padding:.6rem 1.25rem;background:linear-gradient(135deg,rgba(255,0,110,.2),rgba(255,0,110,.1));border:1px solid rgba(255,0,110,.4);border-radius:8px;color:#FF006E;font-size:.85rem;font-family:'JetBrains Mono',monospace">View plans →</a>
         <a href="/pricing" style="display:block;margin-top:.75rem;color:#8C94A6;font-size:.85rem;border-bottom:1px solid rgba(100,100,120,.3);padding-bottom:2px;width:fit-content">Learn more →</a>
       </div>
 
@@ -759,12 +759,26 @@ import Base from '../layouts/Base.astro';
   });
 
   // Email signup
-  document.getElementById('signup-form').addEventListener('submit', function(e) {
+  document.getElementById('signup-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     const email = this.querySelector('input[type=email]').value;
-    if (email.includes('@')) {
-      this.style.display = 'none';
-      document.getElementById('signup-success').style.display = 'flex';
+    const form = this;
+    try {
+      const res = await fetch('https://api.katafract.com/v1/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, list: 'general' })
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('signup-success').style.display = 'flex';
+        if (window.plausible) plausible('Newsletter+Subscribe', { props: { list: 'general' } });
+      } else {
+        alert('Subscription failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Newsletter subscribe error:', err);
+      alert('Subscription failed. Please try again.');
     }
   });
 `}></script>
