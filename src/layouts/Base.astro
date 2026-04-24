@@ -82,6 +82,21 @@ const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toStri
   <!-- Manual-event helper: window.plausible('Event Name', {props:{...}, revenue:{amount,currency}}) -->
   <script>
     window.plausible = window.plausible || function(){(window.plausible.q = window.plausible.q || []).push(arguments)};
+
+    // Scroll-depth tracking: fires once per pageload at 50% and 90%
+    let scrollFired50 = false, scrollFired90 = false;
+    window.addEventListener('scroll', () => {
+      if (typeof window.plausible !== 'function') return;
+      const scrollPercent = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
+      if (scrollPercent >= 0.5 && !scrollFired50) {
+        scrollFired50 = true;
+        window.plausible('Scroll+50');
+      }
+      if (scrollPercent >= 0.9 && !scrollFired90) {
+        scrollFired90 = true;
+        window.plausible('Scroll+90');
+      }
+    }, { passive: true });
   </script>
 </head>
 <body>
