@@ -58,6 +58,27 @@ import Base from '../../layouts/Base.astro';
     }
   </style>
 
+  <script slot="head" type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "DocArmor",
+      "operatingSystem": "iOS",
+      "applicationCategory": "SecurityApplication",
+      "description": "AES-256 encrypted document vault for your IDs, insurance cards, and passports. Face ID protected. Nothing leaves your device.",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "USD",
+        "price": "7.99",
+        "description": "One-time unlock"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Katafract LLC"
+      }
+    }
+  </script>
+
   <div class="app-hero">
     <div class="app-hero-eyebrow">
       <span>DocArmor</span>

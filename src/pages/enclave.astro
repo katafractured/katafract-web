@@ -270,6 +270,32 @@ import Base from '../layouts/Base.astro';
     }
     .bottom-cta p { color: var(--dim); max-width: 480px; margin: 0 auto 2rem; }
   `}></style>
+
+  <script slot="head" type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Enclave",
+      "description": "Privacy network platform with Haven DNS, Enclave VPN, and Vaultyx encrypted cloud storage. Own your entire digital infrastructure.",
+      "offers": [
+        {
+          "@type": "Offer",
+          "priceCurrency": "USD",
+          "price": "8.00",
+          "description": "Enclave subscription with Haven DNS and VPN",
+          "billingDuration": "P1M"
+        },
+        {
+          "@type": "Offer",
+          "priceCurrency": "USD",
+          "price": "18.00",
+          "description": "Sovereign subscription with VPN, DNS, 1TB Vaultyx storage",
+          "billingDuration": "P1M"
+        }
+      ]
+    }
+  </script>
+
   <Fragment set:html={`<!-- Hero -->
   <section class="enclave-hero">
     <p class="enclave-eyebrow">Enclave Network Platform</p>
