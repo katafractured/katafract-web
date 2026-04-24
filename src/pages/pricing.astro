@@ -155,12 +155,11 @@ import Base from '../layouts/Base.astro';
     <p>Every paid Katafract app is unlocked with Enclave ($8/mo) — far cheaper than buying them separately. Infrastructure costs a subscription. Device-side tools are one-time. No surprises.</p>
 
     <div class="toggle-row">
-      <span style="color:#8C94A6;font-size:.85rem">Monthly</span>
-      <div class="toggle-pill">
-        <button class="toggle-btn active" id="btn-monthly" onclick="setBilling('monthly')">Monthly</button>
-        <button class="toggle-btn" id="btn-annual" onclick="setBilling('annual')">Annual</button>
+      <div class="toggle-pill" role="tablist" aria-label="Billing period">
+        <button class="toggle-btn active" id="btn-monthly" onclick="setBilling('monthly')" role="tab" aria-selected="true">Monthly</button>
+        <button class="toggle-btn" id="btn-annual" onclick="setBilling('annual')" role="tab" aria-selected="false">Annual</button>
       </div>
-      <span class="save-badge" id="save-badge">Save 37%</span>
+      <span class="save-badge" id="save-badge">Save 37% annually</span>
     </div>
   </div>
 
@@ -281,11 +280,9 @@ import Base from '../layouts/Base.astro';
   <div class="dns-free-box">
     <h2>Haven DNS — always free, no account</h2>
     <p>Basic DNS protection — ad blocking, tracker blocking — is available without a subscription. Just point your DNS to our servers. Nothing to install, no sign-up.</p>
-    <div class="dns-setup-grid">
-      <div class="dns-setup-item"><div class="os">iPhone</div><div class="addr">dns.katafract.com</div></div>
-      <div class="dns-setup-item"><div class="os">Android</div><div class="addr">dns.katafract.com</div></div>
-      <div class="dns-setup-item"><div class="os">macOS</div><div class="addr">dns.katafract.com</div></div>
-      <div class="dns-setup-item"><div class="os">Router</div><div class="addr">dns.katafract.com</div></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:1rem;margin:1.5rem 0">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:1.15rem;color:#4ADE80;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.25);border-radius:8px;padding:.75rem 1.5rem;letter-spacing:.04em">dns.katafract.com</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#8C94A6;letter-spacing:.15em;text-transform:uppercase">Works on iPhone · Android · macOS · Routers</div>
     </div>
     <a href="/dns" style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#4ADE80">Setup guide →</a>
   </div>
