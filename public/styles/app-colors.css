@@ -4,12 +4,12 @@
  */
 
 :root {
-  --wraith: #818CF8;
-  --vaultyx: #10B981;
-  --safeopen: #F59E0B;
-  --docarmor: #6366F1;
-  --exifarmor: #00F0FF;
-  --parkarmor: #FB923C;
-  --haven: #14B8A6;
-  --praetor: #A855F7;
+  --wraith:   #818CF8;
+  --vaultyx:  #FF006E;
+  --safeopen: #00D4FF;
+  --docarmor: #E879F9;
+  --exifarmor:#00F0FF;
+  --parkarmor:#4ADE80;
+  --haven:    #4ADE80;
+  --praetor:  #FF006E;
 }

@@ -1,0 +1,183 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="WraithVPN for Android — Coming Soon"
+  description="Join the waitlist for WraithVPN on Android. Same clean, fast WireGuard as iOS. No logs, no tracking — just your VPN."
+  ogImage="https://katafract.com/images/og-enclave.jpg"
+  section="android"
+>
+  <link slot="head" rel="stylesheet" href="/style.css" />
+  <style slot="head" is:global set:html={`
+    :root {
+      --bg:       #050510;
+      --bg2:      #0a0a14;
+      --bg3:      #0e0e1c;
+      --border:   rgba(100,100,120,0.1);
+      --border2:  rgba(100,100,120,0.06);
+      --cyan:     #00F0FF;
+      --magenta:  #FF006E;
+      --text:     #EBF0F7;
+      --dim:      #8C94A6;
+      --dim2:     #4a5060;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .fd { font-family: 'Cormorant Garamond', Georgia, serif; }
+    .fm { font-family: 'JetBrains Mono', monospace; }
+
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
+
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 6rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
+    }
+    .hero-inner {
+      position: relative; z-index: 1; max-width: 900px; margin: 0 auto;
+      opacity: 1; transform: translateY(0);
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif; font-weight: 700; line-height: 1.0;
+      letter-spacing: -.01em; margin-bottom: 1.5rem;
+      font-size: clamp(3.5rem, 8vw, 5.5rem);
+      text-shadow: 0 0 60px rgba(0,240,255,.2);
+    }
+    .hero p { font-size: clamp(1rem,2vw,1.2rem); color: var(--dim); max-width: 640px; margin: 0 auto 3rem; line-height: 1.7; }
+
+    .form-block { max-width: 500px; margin: 3rem auto 0; }
+    .signup-form { display: flex; gap: .75rem; max-width: 420px; margin: 0 auto; flex-wrap: wrap; }
+    .signup-form input {
+      flex: 1; min-width: 0;
+      font-family: 'JetBrains Mono', monospace; font-size: .875rem;
+      padding: .875rem 1.25rem; border-radius: 999px;
+      background: rgba(15,15,25,.8); border: 1px solid rgba(100,100,120,.3);
+      color: var(--text); outline: none;
+      transition: border-color .15s;
+    }
+    .signup-form input::placeholder { color: var(--dim2); }
+    .signup-form input:focus { border-color: rgba(0,240,255,.3); }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--cyan); color: #050510;
+      font-weight: 700; font-size: .9rem;
+      padding: .875rem 2rem; border-radius: 999px;
+      transition: opacity .15s, transform .1s;
+      border: none; cursor: pointer;
+    }
+    .btn-primary:hover { opacity: .88; transform: translateY(-1px); text-decoration: none; }
+    .signup-success { display: flex; align-items: center; justify-content: center; gap: .5rem; color: var(--cyan); padding: 1rem; }
+
+    .live-apps { margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--border2); }
+    .live-apps h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text); }
+    .apps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; max-width: 600px; margin: 0 auto; }
+    .app-link {
+      border: 1px solid rgba(100,100,120,.2); border-radius: 1rem; padding: 1.5rem; text-align: center;
+      background: rgba(10,10,20,.5); transition: border-color .2s, background .2s;
+    }
+    .app-link:hover { border-color: rgba(0,240,255,.2); background: rgba(10,10,20,.7); text-decoration: none; }
+    .app-link .icon { font-size: 2.5rem; margin-bottom: .5rem; }
+    .app-link .name { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: .25rem; }
+    .app-link .category { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--dim2); }
+
+    .dns-note { margin-top: 2rem; padding: 1.5rem; border: 1px solid rgba(0,240,255,.2); border-radius: 1rem; background: rgba(0,240,255,.05); max-width: 600px; margin-left: auto; margin-right: auto; }
+    .dns-note h4 { font-family: 'JetBrains Mono', monospace; font-size: .8rem; color: var(--cyan); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .75rem; }
+    .dns-note p { color: var(--dim); font-size: .9rem; line-height: 1.6; margin-bottom: 1rem; }
+    .dns-note a { color: var(--cyan); }
+
+    .glow { position: absolute; pointer-events: none; border-radius: 50%; transform: translate(-50%,-50%); }
+
+    @media (max-width: 640px) {
+      .hero { padding: 5rem 1.5rem 3rem; }
+      .apps-grid { grid-template-columns: 1fr; }
+    }
+  `}></style>
+
+  <Fragment set:html={`<!-- Hero -->
+<section class="hero" style="background:linear-gradient(to bottom,transparent,rgba(0,240,255,.01),transparent);position:relative">
+  <div class="glow" style="left:50%;top:50%;width:600px;height:600px;background:radial-gradient(circle,rgba(0,240,255,.05) 0%,transparent 70%)"></div>
+  <div class="hero-inner">
+    <h1 class="fd">WraithVPN for Android<br><em style="color:#00F0FF">coming soon</em></h1>
+    <p>We're building Wraith for Android the same way we built it for iOS: clean, fast WireGuard, Haven DNS at every exit, no logs — not as a strategy, as an architecture. When it's ready, you'll be the first to know.</p>
+
+    <div class="form-block">
+      <form class="signup-form" id="android-form">
+        <input type="email" name="email" placeholder="your@email.com" required>
+        <button type="submit" class="btn-primary fm">✉ Join</button>
+      </form>
+      <div id="android-success" class="signup-success" style="display:none">⬡ You're on the list.</div>
+    </div>
+
+    <!-- Live apps section -->
+    <div class="live-apps">
+      <h3>Already live on iOS & Android</h3>
+      <div class="apps-grid">
+        <a href="/apps/wraith" class="app-link">
+          <div class="icon">🛡️</div>
+          <div class="name">WraithVPN</div>
+          <div class="category">iOS</div>
+        </a>
+        <a href="/apps/safeopen" class="app-link">
+          <div class="icon">🔍</div>
+          <div class="name">SafeOpen</div>
+          <div class="category">iOS</div>
+        </a>
+        <a href="/apps/exifarmor" class="app-link">
+          <div class="icon">🛡️</div>
+          <div class="name">ExifArmor</div>
+          <div class="category">iOS</div>
+        </a>
+        <a href="/apps/parkarmor" class="app-link">
+          <div class="icon">📍</div>
+          <div class="name">ParkArmor</div>
+          <div class="category">iOS</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Haven DNS note -->
+    <div class="dns-note">
+      <h4>Haven DNS works on Android today</h4>
+      <p>Can't wait for WraithVPN? Set up Haven DoH right now on any Android device for ad blocking and privacy DNS. No account needed.</p>
+      <a href="/dns">Get Haven free →</a>
+    </div>
+  </div>
+</section>
+  `} />
+
+  <script slot="scripts" is:inline set:html={`
+  // Android waitlist signup
+  document.getElementById('android-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const email = this.querySelector('input[type=email]').value;
+    const form = this;
+    try {
+      const res = await fetch('https://api.katafract.com/v1/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, list: 'android-waitlist' })
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('android-success').style.display = 'flex';
+        if (window.plausible) plausible('Android+Waitlist+Join');
+      } else {
+        alert('Signup failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Android waitlist error:', err);
+      alert('Signup failed. Please try again.');
+    }
+  });
+  `}></script>
+</Base>
