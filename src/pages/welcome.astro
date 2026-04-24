@@ -1,9 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { appBySlug } from '../data/apps.ts';
-
-const wraith = appBySlug('wraith');
-const wraithUrl = wraith?.appStoreUrl ?? null;
+// Stripe buyers only — iOS users purchase inside the app via Apple ID and never land here.
 ---
 <Base
   title={`Welcome to Enclave — Katafract`}
@@ -58,70 +55,32 @@ const wraithUrl = wraith?.appStoreUrl ?? null;
           <span id="pill-text">Payment confirmed</span>
         </div>
         <h1>Welcome to Enclave.</h1>
-        <p>Your subscription is active. Here's how to start using it — pick your path:</p>
+        <p>Your Stripe subscription is active. Here's how to get your WireGuard config — one destination, three steps.</p>
       </div>
 
-      <div class="paths-grid">
+      <div class="paths-grid" style="grid-template-columns:1fr;max-width:620px">
 
-        <!-- iPhone / iPad -->
-        <div class="path-card ios-card">
-          <div class="path-icon">📱</div>
-          <div class="path-title">iPhone or iPad</div>
-          <div class="path-sub">You already have it. Install WraithVPN from the App Store and your subscription unlocks automatically via your Apple ID.</div>
-
-          {wraithUrl ? (
-            <>
-              <ul class="path-steps">
-                <li><span class="step-num">1</span><span>Tap the App Store button below — install WraithVPN.</span></li>
-                <li><span class="step-num">2</span><span>Open the app and sign in with your Apple ID.</span></li>
-                <li><span class="step-num">3</span><span>Your Enclave subscription unlocks automatically — no token to paste.</span></li>
-              </ul>
-              <a
-                href={wraithUrl}
-                class="path-cta magenta"
-                data-plausible-event-name="Welcome+AppStore+Click"
-                data-plausible-event-platform="ios"
-                onclick="window.plausible && window.plausible('Welcome AppStore Click', {props:{platform:'ios'}})"
-                target="_blank"
-                rel="noopener"
-              >
-                Download on the App Store →
-              </a>
-            </>
-          ) : (
-            <>
-              <div class="coming-soon-note">
-                WraithVPN is currently in Apple review — expected approval soon. You'll receive an email the moment it's available.
-              </div>
-              <ul class="path-steps">
-                <li><span class="step-num">1</span><span>Watch for our email notification when WraithVPN is approved.</span></li>
-                <li><span class="step-num">2</span><span>Install from the App Store link in that email.</span></li>
-                <li><span class="step-num">3</span><span>Sign in with Apple ID — your subscription activates instantly.</span></li>
-              </ul>
-              <span class="path-cta ghost" style="cursor:default;pointer-events:none">Coming soon to the App Store</span>
-            </>
-          )}
-        </div>
-
-        <!-- Everything else -->
+        <!-- Single path: Stripe buyers come here for a WireGuard .conf.
+             iOS buyers purchase inside the app via Apple ID and never hit
+             Stripe, so there's no iOS panel here. -->
         <div class="path-card">
-          <div class="path-icon">💻</div>
-          <div class="path-title">Mac, Windows, Linux, Android, or Router</div>
-          <div class="path-sub">Visit the client portal, paste your subscription ID from the Stripe confirmation email, and we generate a WireGuard config file or QR code for your device.</div>
+          <div class="path-icon">🔑</div>
+          <div class="path-title">Get your WireGuard config</div>
+          <div class="path-sub">Buying via Stripe means you want a WireGuard config for Mac, Windows, Linux, Android, or a router. Open your Stripe receipt email, head to connect.katafract.com, and download it.</div>
           <ul class="path-steps">
-            <li><span class="step-num">1</span><span>Find your <strong>subscription ID</strong> in the Stripe receipt email (starts with <code style="font-family:'JetBrains Mono',monospace;font-size:.8em;color:#00F0FF">sub_</code>).</span></li>
-            <li><span class="step-num">2</span><span>Visit <strong>connect.katafract.com</strong> and paste it.</span></li>
-            <li><span class="step-num">3</span><span>Download your <code style="font-family:'JetBrains Mono',monospace;font-size:.8em;color:#00F0FF">.conf</code> file or scan the QR code in the WireGuard app — available free on all platforms.</span></li>
+            <li><span class="step-num">1</span><span>Open your <strong>Stripe receipt email</strong> (just arrived).</span></li>
+            <li><span class="step-num">2</span><span>Visit <strong>connect.katafract.com</strong> and paste the email you used at checkout.</span></li>
+            <li><span class="step-num">3</span><span>Download your <code style="font-family:'JetBrains Mono',monospace;font-size:.8em;color:#00F0FF">.conf</code> file or scan the QR code in the WireGuard app — free on every platform.</span></li>
           </ul>
           <p style="font-size:.78rem;color:#4a5060;margin-bottom:1.5rem;line-height:1.5">
-            WireGuard is the industry-standard VPN protocol — open source, audited, runs everywhere. No proprietary app required on desktop.
+            WireGuard is the industry-standard VPN protocol — open source, audited, runs everywhere. On iPhone or iPad? WraithVPN lives in the App Store and iOS users buy inside the app, not via Stripe.
           </p>
           <a
             href="https://connect.katafract.com"
             class="path-cta cyan"
             data-plausible-event-name="Welcome+Connect+Click"
-            data-plausible-event-platform="desktop"
-            onclick="window.plausible && window.plausible('Welcome Connect Click', {props:{platform:'desktop'}})"
+            data-plausible-event-platform="stripe"
+            onclick="window.plausible && window.plausible('Welcome Connect Click', {props:{platform:'stripe'}})"
             target="_blank"
             rel="noopener"
           >
