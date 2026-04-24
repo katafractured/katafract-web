@@ -5,11 +5,12 @@ import Base from '../../layouts/Base.astro';
   title={`Haven — Private DNS for every device`}
   description={`Haven DNS blocks ads, trackers, and malware at the DNS layer. Free with no account. Works on iPhone, Mac, and any device that supports DNS-over-HTTPS. Part of Katafract Enclave.`}
   section="apps"
+  twitterCard="summary_large_image"
   ogDescription={`Haven DNS blocks ads, trackers, and malware at the DNS layer — before requests leave your device. Free. No account. No VPN required.`}
   ogImage="https://katafract.com/images/og-haven.jpg"
 >
-  <link slot="head" rel="stylesheet" href="/style.css" />
   <style slot="head" is:global set:html={`
+    :root { --app-accent: var(--haven); }
     /* App page hero */
     .app-hero {
       padding: 4rem 1.5rem 3rem;
@@ -20,7 +21,7 @@ import Base from '../../layouts/Base.astro';
     .app-hero-eyebrow {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.7rem;
-      color: #4ADE80;
+      color: var(--app-accent);
       letter-spacing: 0.3em;
       text-transform: uppercase;
       margin-bottom: 1.25rem;
@@ -42,7 +43,7 @@ import Base from '../../layouts/Base.astro';
       letter-spacing: -0.01em;
       margin-bottom: 1.25rem;
     }
-    .app-hero h1 em { font-style: normal; color: #4ADE80; }
+    .app-hero h1 em { font-style: normal; color: var(--app-accent); }
     .app-hero .tagline {
       font-size: 1.1rem;
       color: var(--dim);
@@ -61,7 +62,7 @@ import Base from '../../layouts/Base.astro';
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: #4ADE80;
+      background: var(--app-accent);
       color: #050510;
       font-weight: 700;
       font-size: 0.9rem;
@@ -123,7 +124,7 @@ import Base from '../../layouts/Base.astro';
     .app-section-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.68rem;
-      color: #4ADE80;
+      color: var(--app-accent);
       letter-spacing: 0.25em;
       text-transform: uppercase;
       margin-bottom: 0.75rem;
@@ -258,7 +259,7 @@ import Base from '../../layouts/Base.astro';
     <div class="app-page-section">
       <div class="app-section-label">Next step</div>
       <h2 class="app-section-title">Get started in 60 seconds</h2>
-      <p class="app-section-sub">Visit <a href="/dns" style="color:#4ADE80;text-decoration:underline;">our DNS setup page</a> to install Haven on iPhone, Mac, Android, or any device. Full instructions for routers and browsers included.</p>
+      <p class="app-section-sub">Visit <a href="/dns" style="color:var(--haven);text-decoration:underline;">our DNS setup page</a> to install Haven on iPhone, Mac, Android, or any device. Full instructions for routers and browsers included.</p>
     </div>
 
     <div class="features-grid">
@@ -283,7 +284,7 @@ import Base from '../../layouts/Base.astro';
     <hr class="section-divider">
 
     <p style="text-align:center;color:var(--dim);font-size:0.95rem;margin-top:2rem;line-height:1.7;">
-      Haven DNS is free and included with all Enclave and Sovereign plans. <a href="/pricing" style="color:#4ADE80;text-decoration:underline;">See what's included →</a>
+      Haven DNS is free and included with all Enclave and Sovereign plans. <a href="/pricing" style="color:var(--haven);text-decoration:underline;">See what's included →</a>
     </p>
 
   </main>`} />

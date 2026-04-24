@@ -6,11 +6,12 @@ import PageHero from '../../components/PageHero.astro';
   title={`ExifArmor — Share photos, not your location`}
   description={`ExifArmor strips hidden GPS and metadata from your photos before you share them. One tap. No cloud. Your photos never leave your device.`}
   section="apps"
+  twitterCard="summary_large_image"
   ogDescription={`Every photo you share contains hidden GPS coordinates, device info, and timestamps. ExifArmor strips it all with one tap. Free with 5 daily strips, or $0.99 to unlock.`}
   ogImage="https://katafract.com/images/og-exifarmor.jpg"
 >
-  <link slot="head" rel="stylesheet" href="/style.css" />
   <style slot="head" is:global set:html={`
+    :root { --app-accent: var(--exifarmor); }
     .app-main { max-width: 900px; margin: 0 auto; padding: 0 1.5rem 5rem; }
     .app-cta-row {
       display: flex;
@@ -163,7 +164,7 @@ import PageHero from '../../components/PageHero.astro';
     .app-section-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.68rem;
-      color: var(--cyan);
+      color: var(--app-accent);
       letter-spacing: 0.25em;
       text-transform: uppercase;
       margin-bottom: 0.75rem;
@@ -225,7 +226,7 @@ import PageHero from '../../components/PageHero.astro';
       </a>
       <span class="price-note">Free · Pro available · Or bundled with Enclave · <a href="/pricing" style="color:var(--cyan)">See pricing</a></span>
     </div>
-    <div style="margin-top:0.75rem;font-size:0.85rem;color:var(--dim)">Android? <a href="/android/" style="color:#00F0FF">Join the waitlist →</a></div>
+    <div style="margin-top:0.75rem;font-size:0.85rem;color:var(--dim)">Android? <a href="/android/" style="color:var(--exifarmor)">Join the waitlist →</a></div>
   </div>
 
   <main class="app-main">
