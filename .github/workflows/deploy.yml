@@ -34,7 +34,9 @@ jobs:
           fi
 
       - name: Deploy to Cloudflare Pages
-        run: npx wrangler pages deploy dist --project-name katafract-web --branch main
+        run: |
+          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -1 | LC_ALL=C tr -dc '[:print:]' | cut -c1-200)
+          npx wrangler pages deploy dist --project-name katafract-web --branch main --commit-message="${COMMIT_MSG:-deploy}"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: bab9d8a1edbf2d5f4882c4452534c860
