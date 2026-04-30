@@ -1,9 +1,12 @@
 /**
- * Single source of truth for app metadata.
+ * Single source of truth for app metadata (status, badge, App Store URL).
  *
- * Update this file whenever status, price, or App Store URL changes.
- * Every page that shows app status/badge/CTA must read from here —
- * never hardcode status text or App Store links in individual pages.
+ * Pricing is NOT defined in this file — it's derived from `./pricing.ts`,
+ * which is the canonical $ source. Every $ amount you see on the site
+ * traces back to pricing.ts; never hardcode a price here or in a template.
+ *
+ * Update this file whenever status or App Store URL changes. When prices
+ * change, update pricing.ts; the strings here recompute on next build.
  *
  * Status values:
  *   live    — in App Store, real URL, show "Download on the App Store"
@@ -13,6 +16,8 @@
  *   profile — Haven: install DNS profile, no App Store app, show "Set up Haven →"
  *   stub    — Praetor: no public commitment yet, show "In development"
  */
+
+import { fmtUsd, APP_UNLOCK_PRICES, VAULTYX_TIERS } from './pricing';
 
 export type AppStatus = 'live' | 'review' | 'ready' | 'soon' | 'profile' | 'stub';
 
@@ -48,7 +53,7 @@ export const APPS: AppMeta[] = [
     status: 'live',
     statusBadge: 'Live on App Store',
     appStoreUrl: 'https://apps.apple.com/app/id6760979268',
-    price: 'Free + $0.99 unlock · bundled with Enclave',
+    price: `Free + ${fmtUsd(APP_UNLOCK_PRICES.exifarmor.unlock_usd!)} unlock`,
     accent: '#00F0FF',
     tagline: 'Share photos, not your location',
     description: 'Strips hidden GPS coordinates, device info, and timestamps from photos before you share. One tap, originals untouched.',
@@ -66,7 +71,7 @@ export const APPS: AppMeta[] = [
     status: 'live',
     statusBadge: 'Live on App Store',
     appStoreUrl: 'https://apps.apple.com/app/id6760988040',
-    price: 'Free + $0.99 unlock · bundled with Enclave',
+    price: `Free + ${fmtUsd(APP_UNLOCK_PRICES.parkarmor.unlock_usd!)} unlock`,
     accent: '#4ADE80',
     tagline: 'Never lose your car again',
     description: 'One tap saves your parked spot. Walking directions back, timer, lock screen widget. Your location never leaves your device.',
@@ -86,7 +91,7 @@ export const APPS: AppMeta[] = [
     // NOTE: App Store URL exists in schema/proof section of wraith.astro (id6745785827)
     // but the app is not yet approved/live. Set to null until Apple approves.
     appStoreUrl: null,
-    price: 'Enclave tier only ($8/mo)',
+    price: 'In Apple review',
     accent: '#818CF8',
     tagline: 'Fast, private WireGuard VPN with Haven DNS built in',
     description: 'WireGuard VPN on Katafract-operated nodes. Haven DNS at every exit, kill switch, 5 devices, no logs.',
@@ -105,7 +110,7 @@ export const APPS: AppMeta[] = [
     statusBadge: 'Coming soon · In review',
     // NOTE: id6761782681 referenced in index.astro — not yet approved
     appStoreUrl: null,
-    price: 'Free + credits · bundled with Enclave',
+    price: 'Free + credits',
     accent: '#F97316',
     tagline: 'Know what you\'re opening before you tap',
     description: 'QR scanner and link inspector. On-device risk scoring, AI summaries via privacy relay. Free with consumable scan credits.',
@@ -123,10 +128,10 @@ export const APPS: AppMeta[] = [
     status: 'ready',
     statusBadge: 'Coming soon',
     appStoreUrl: null,
-    price: '$7.99 one-time · bundled with Enclave',
+    price: `${fmtUsd(APP_UNLOCK_PRICES.docarmor.unlock_usd!)} one-time unlock`,
     accent: '#E879F9',
     tagline: 'Your IDs, encrypted, on your device',
-    description: 'AES-256 encrypted vault for IDs, insurance cards, and passports. Face ID protected. Cloud backup with Sovereign.',
+    description: 'AES-256 encrypted vault for IDs, insurance cards, and passports. Face ID protected. On-device only at launch.',
     platforms: ['iOS'],
     hasDedicatedPage: true,
     hasSupport: true,
@@ -141,7 +146,7 @@ export const APPS: AppMeta[] = [
     status: 'live',
     statusBadge: 'Live on App Store',
     appStoreUrl: 'https://apps.apple.com/app/id6762418528',
-    price: 'From $1.99/mo · 100GB / 1TB / 5TB',
+    price: `From ${fmtUsd(VAULTYX_TIERS[0].monthly_usd)}/mo · ${VAULTYX_TIERS.map((t) => t.capacity).join(' / ')}`,
     accent: '#FF006E',
     tagline: 'Encrypted cloud storage we cannot read',
     description: 'Client-side AES-256-GCM. Keys live in your iOS Keychain. Files replicated across 3 datacenters in 2 jurisdictions. We receive ciphertext.',
@@ -177,7 +182,7 @@ export const APPS: AppMeta[] = [
     status: 'stub',
     statusBadge: 'In development',
     appStoreUrl: null,
-    price: 'Sovereign tier only (future)',
+    price: 'In development',
     accent: '#FF006E',
     tagline: 'Offline-first PIM and encrypted email',
     description: 'Personal information manager and email client. IMAP/SMTP sync, encrypted locally, never in the cloud. Not yet shipped.',

@@ -1,53 +1,88 @@
 ---
 import Base from '../layouts/Base.astro';
+import {
+  VAULTYX_TIERS,
+  APP_UNLOCK_PRICES,
+  fmtUsd,
+  annualSavingsPct,
+  appStoreUrl,
+} from '../data/pricing';
+
+// Derived values for hero + plan card
+const minVaultyxMonthly = Math.min(...VAULTYX_TIERS.map((t) => t.monthly_usd));
+const featuredTier = VAULTYX_TIERS.find((t) => t.featured) ?? VAULTYX_TIERS[1];
+const vaultyxAnnualPct = annualSavingsPct(featuredTier.monthly_usd, featuredTier.annual_usd);
+const minUtilityUnlock = Math.min(
+  ...Object.values(APP_UNLOCK_PRICES)
+    .map((p) => p.unlock_usd)
+    .filter((v): v is number => v != null),
+);
+const maxUtilityUnlock = Math.max(
+  ...Object.values(APP_UNLOCK_PRICES)
+    .map((p) => p.unlock_usd)
+    .filter((v): v is number => v != null),
+);
+const vaultyxAppStore = appStoreUrl('vaultyx');
+
+const tiersJsonLd = VAULTYX_TIERS.map((t) => ({
+  '@type': 'Offer',
+  priceCurrency: 'USD',
+  price: t.monthly_usd.toFixed(2),
+  name: `Vaultyx ${t.capacity} monthly`,
+}));
 ---
 <Base
-  title={`Pricing — Katafract Enclave`}
-  description={`Haven DNS free. Enclave VPN from $8/month. Sovereign with Vaultyx from $18/month. No identity required. Token-based. Cancel anytime.`}
+  title={`Pricing — Katafract`}
+  description={`App-specific pricing. Haven DNS is free. Utility apps are ${fmtUsd(minUtilityUnlock)}–${fmtUsd(maxUtilityUnlock)} one-time. Vaultyx encrypted storage starts at ${fmtUsd(minVaultyxMonthly)}/month. No platform bundle until WraithVPN ships.`}
   section="pricing"
 >
   <link slot="head" rel="stylesheet" href="/style.css" />
   <style slot="head" is:global set:html={`
     .pricing-hero { padding: 8rem 0 4rem; text-align: center; }
     .pricing-hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem,6vw,4rem); font-weight: 700; margin-bottom: 1rem; line-height: 1.1; }
-    .pricing-hero p { color: #8C94A6; font-size: 1.1rem; max-width: 560px; margin: 0 auto 2.5rem; line-height: 1.7; }
-    .toggle-row { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 4rem; font-size: .9rem; }
-    .toggle-pill { background: #0a0a14; border: 1px solid rgba(100,100,120,.2); border-radius: 999px; padding: .2rem; display: flex; }
-    .toggle-btn { padding: .4rem 1.25rem; border-radius: 999px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: .75rem; letter-spacing: .05em; border: none; background: transparent; color: #8C94A6; transition: all .2s; }
-    .toggle-btn.active { background: rgba(255,0,110,.15); color: #FF006E; }
-    .save-badge { font-family: 'JetBrains Mono', monospace; font-size: .65rem; padding: .2rem .6rem; border-radius: 999px; background: rgba(74,222,128,.15); color: #4ADE80; }
-    .plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto 5rem; }
-    .plan-card { background: #0a0a14; border: 1px solid rgba(100,100,120,.15); border-radius: 20px; padding: 2.5rem; position: relative; overflow: hidden; }
+    .pricing-hero p { color: #8C94A6; font-size: 1.1rem; max-width: 620px; margin: 0 auto 2.5rem; line-height: 1.7; }
+    .plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 2rem auto 5rem; }
+    .plan-card { background: #0a0a14; border: 1px solid rgba(100,100,120,.15); border-radius: 20px; padding: 2.25rem 2rem; position: relative; overflow: hidden; display: flex; flex-direction: column; }
     .plan-card.featured { border-color: rgba(255,0,110,.3); }
     .plan-card.featured::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #FF006E, rgba(255,0,110,.2)); }
-    .plan-label { font-family: 'JetBrains Mono', monospace; font-size: .65rem; letter-spacing: .25em; text-transform: uppercase; margin-bottom: 1.25rem; }
-    .plan-name { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 700; margin-bottom: .5rem; }
-    .plan-tagline { color: #8C94A6; font-size: .9rem; margin-bottom: 2rem; line-height: 1.5; }
-    .plan-price { margin-bottom: 2rem; }
-    .plan-price .amount { font-family: 'JetBrains Mono', monospace; font-size: 2.5rem; font-weight: 600; }
+    .plan-card.future { border-style: dashed; opacity: .85; }
+    .plan-label { font-family: 'JetBrains Mono', monospace; font-size: .65rem; letter-spacing: .25em; text-transform: uppercase; margin-bottom: 1rem; }
+    .plan-name { font-family: 'Cormorant Garamond', serif; font-size: 1.85rem; font-weight: 700; margin-bottom: .5rem; }
+    .plan-tagline { color: #8C94A6; font-size: .9rem; margin-bottom: 1.75rem; line-height: 1.5; }
+    .plan-price { margin-bottom: 1.75rem; }
+    .plan-price .amount { font-family: 'JetBrains Mono', monospace; font-size: 2.25rem; font-weight: 600; }
     .plan-price .period { color: #8C94A6; font-size: .85rem; }
-    .plan-price .annual-note { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: #4ADE80; margin-top: .25rem; display: none; }
-    .annual .plan-price .annual-note { display: block; }
-    .plan-features { list-style: none; margin-bottom: 2rem; display: flex; flex-direction: column; gap: .75rem; }
-    .plan-features li { display: flex; align-items: flex-start; gap: .6rem; font-size: .875rem; color: #8C94A6; }
+    .plan-price .annual-note { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: #4ADE80; margin-top: .25rem; }
+    .plan-features { list-style: none; margin-bottom: 1.75rem; display: flex; flex-direction: column; gap: .65rem; flex: 1; padding: 0; }
+    .plan-features li { display: flex; align-items: flex-start; gap: .6rem; font-size: .875rem; color: #8C94A6; line-height: 1.5; }
     .plan-features li .check { flex-shrink: 0; margin-top: 1px; }
-    .plan-features li.dim { opacity: .4; }
-    .plan-cta { display: block; width: 100%; padding: .85rem; border-radius: 10px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: .875rem; font-weight: 500; cursor: pointer; text-decoration: none; transition: opacity .2s; }
+    .plan-features li.dim { opacity: .55; }
+    .plan-cta { display: block; width: 100%; padding: .85rem; border-radius: 10px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: .875rem; font-weight: 500; cursor: pointer; text-decoration: none; transition: opacity .2s; box-sizing: border-box; }
     .plan-cta:hover { opacity: .85; text-decoration: none; }
     .plan-cta.primary { background: linear-gradient(135deg, rgba(255,0,110,.8), rgba(255,0,110,.5)); color: #fff; border: 1px solid rgba(255,0,110,.4); }
     .plan-cta.secondary { background: transparent; color: #4ADE80; border: 1px solid rgba(74,222,128,.3); }
-    .plan-cta.ghost { background: transparent; color: #8C94A6; border: 1px solid rgba(100,100,120,.2); }
-    .compare-table { max-width: 860px; margin: 0 auto 6rem; }
-    .compare-table h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; text-align: center; margin-bottom: 2rem; }
-    table { width: 100%; border-collapse: collapse; font-size: .875rem; }
-    th { font-family: 'JetBrains Mono', monospace; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: #8C94A6; padding: .75rem 1rem; text-align: left; border-bottom: 1px solid rgba(100,100,120,.12); }
-    th:not(:first-child) { text-align: center; }
-    td { padding: .75rem 1rem; color: #8C94A6; border-bottom: 1px solid rgba(100,100,120,.06); }
-    td:not(:first-child) { text-align: center; }
-    td.yes { color: #4ADE80; }
-    td.yes-mag { color: #FF006E; }
-    td.no { color: #4a5060; }
-    tr:hover td { background: rgba(100,100,120,.03); }
+    .plan-cta.cyan { background: transparent; color: #00F0FF; border: 1px solid rgba(0,240,255,.3); }
+    .plan-cta.disabled { background: transparent; color: #4a5060; border: 1px dashed rgba(100,100,120,.3); cursor: not-allowed; }
+    .plan-cta.disabled:hover { opacity: 1; }
+
+    .dns-free-box { background: #0a0a14; border: 1px solid rgba(100,100,120,.15); border-radius: 16px; padding: 2.5rem; max-width: 700px; margin: 0 auto 6rem; text-align: center; }
+    .dns-free-box h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; margin-bottom: .75rem; }
+    .dns-free-box p { color: #8C94A6; font-size: .9rem; margin-bottom: 1.75rem; line-height: 1.7; }
+
+    .vaultyx-tiers { max-width: 900px; margin: 0 auto 5rem; }
+    .vaultyx-tiers h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; text-align: center; margin-bottom: 1.5rem; }
+    .vaultyx-tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .vaultyx-tier { background: rgba(255,0,110,.03); border: 1px solid rgba(255,0,110,.15); border-radius: 12px; padding: 1.5rem 1.25rem; text-align: center; }
+    .vaultyx-tier.featured { border-color: rgba(255,0,110,.35); background: rgba(255,0,110,.06); }
+    .vaultyx-tier .cap { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 700; color: #fff; }
+    .vaultyx-tier .price { font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; color: #FF006E; margin-top: .35rem; }
+    .vaultyx-tier .annual { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: #8C94A6; margin-top: .25rem; }
+
+    .future-bundle-box { max-width: 720px; margin: 0 auto 6rem; padding: 2.5rem 2rem; background: linear-gradient(135deg, rgba(255,0,110,.04), rgba(255,0,110,.01)); border: 1px dashed rgba(255,0,110,.25); border-radius: 16px; text-align: center; }
+    .future-bundle-box h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; margin-bottom: .75rem; }
+    .future-bundle-box p { color: #8C94A6; font-size: .95rem; line-height: 1.7; max-width: 540px; margin: 0 auto .75rem; }
+    .future-bundle-box .small { font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: #4a5060; margin-top: 1.25rem; letter-spacing: .12em; text-transform: uppercase; }
+
     .faq { max-width: 680px; margin: 0 auto 6rem; }
     .faq h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; text-align: center; margin-bottom: 2.5rem; }
     .faq-item { border-bottom: 1px solid rgba(100,100,120,.1); padding: 1.25rem 0; cursor: pointer; }
@@ -55,383 +90,218 @@ import Base from '../layouts/Base.astro';
     .faq-q::after { content: '+'; color: #8C94A6; font-size: 1.2rem; flex-shrink: 0; transition: transform .2s; }
     .faq-item.open .faq-q::after { transform: rotate(45deg); }
     .faq-a { color: #8C94A6; font-size: .9rem; line-height: 1.7; max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .3s ease; }
-    .faq-item.open .faq-a { max-height: 300px; padding-top: .75rem; }
-    .dns-free-box { background: #0a0a14; border: 1px solid rgba(100,100,120,.15); border-radius: 16px; padding: 2.5rem; max-width: 700px; margin: 0 auto 6rem; text-align: center; }
-    .dns-free-box h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; margin-bottom: .75rem; }
-    .dns-free-box p { color: #8C94A6; font-size: .9rem; margin-bottom: 1.75rem; line-height: 1.7; }
-    .dns-setup-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; text-align: left; margin-bottom: 1.5rem; }
-    .dns-setup-item { background: rgba(100,100,120,.05); border-radius: 8px; padding: .75rem; }
-    .dns-setup-item .os { font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: #8C94A6; letter-spacing: .1em; margin-bottom: .35rem; }
-    .dns-setup-item .addr { font-family: 'JetBrains Mono', monospace; font-size: .75rem; color: #00F0FF; }
-    @media (max-width: 640px) { .plans-grid { grid-template-columns: 1fr; } th, td { padding: .6rem .5rem; } }
+    .faq-item.open .faq-a { max-height: 400px; padding-top: .75rem; }
+
+    @media (max-width: 640px) {
+      .plans-grid { grid-template-columns: 1fr; }
+      .plan-card { padding: 1.75rem 1.5rem; }
+    }
   `}></style>
-  <script slot="head" type="application/ld+json" is:inline set:html={`
-[
-  {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "Haven",
-    "description": "Encrypted DNS with ad, tracker, and malware blocking. No account, no payment, no logs.",
-    "brand": {
-      "@type": "Brand",
-      "name": "Katafract"
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify([
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: 'Haven',
+      description: 'Encrypted DNS with ad, tracker, and malware blocking. Free. No account, no payment, no logs.',
+      brand: { '@type': 'Brand', name: 'Katafract' },
+      url: 'https://katafract.com/dns',
+      offers: [{ '@type': 'Offer', priceCurrency: 'USD', price: '0' }],
     },
-    "url": "https://katafract.com/dns",
-    "offers": [
-      {
-        "@type": "Offer",
-        "priceCurrency": "USD",
-        "price": "0"
-      }
-    ]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "Enclave",
-    "description": "Single-hop WireGuard VPN, all utility apps unlocked, 50 AI credits/month, DNS tier picker.",
-    "brand": {
-      "@type": "Brand",
-      "name": "Katafract"
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Vaultyx',
+      operatingSystem: 'iOS',
+      applicationCategory: 'SecurityApplication',
+      description: 'Zero-knowledge encrypted cloud storage. AES-256-GCM on your device, keys in your iOS Keychain, replicated across 3 datacenters in 2 jurisdictions.',
+      offers: tiersJsonLd,
+      author: { '@type': 'Organization', name: 'Katafract LLC' },
     },
-    "url": "https://katafract.com/pricing",
-    "offers": [
-      {
-        "@type": "Offer",
-        "priceCurrency": "USD",
-        "price": "8.00",
-        "url": "https://buy.stripe.com/28E3cv0tH2qK5EK4kUffy0j",
-        "billingDuration": "P1M",
-        "pricingPattern": "Subscription"
-      },
-      {
-        "@type": "Offer",
-        "priceCurrency": "USD",
-        "price": "64.00",
-        "url": "https://buy.stripe.com/aFaaEXgsFghA8QWcRqffy0k",
-        "billingDuration": "P1Y",
-        "pricingPattern": "Subscription"
-      }
-    ]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "Sovereign",
-    "description": "Complete privacy perimeter with multi-hop VPN, 1TB encrypted storage, and all apps included.",
-    "brand": {
-      "@type": "Brand",
-      "name": "Katafract"
-    },
-    "url": "https://katafract.com/pricing",
-    "offers": [
-      {
-        "@type": "Offer",
-        "priceCurrency": "USD",
-        "price": "18.00",
-        "url": "https://buy.stripe.com/7sY9ATekx1mG2sydVuffy0h",
-        "billingDuration": "P1M",
-        "pricingPattern": "Subscription"
-      },
-      {
-        "@type": "Offer",
-        "priceCurrency": "USD",
-        "price": "144.00",
-        "url": "https://buy.stripe.com/8x228ra4h1mGaZ4dVuffy0i",
-        "billingDuration": "P1Y",
-        "pricingPattern": "Subscription"
-      }
-    ]
-  }
-]
-  `}></script>
-  <Fragment set:html={`<main>
-<div class="container">
+  ])}>
+  </script>
 
-  <!-- Hero -->
-  <div class="pricing-hero">
-    <div class="section-label-sm fm" style="font-size:.65rem;color:#FF006E;letter-spacing:.3em;text-transform:uppercase;margin-bottom:1rem">Enclave Platform</div>
-    <h1>Simple, honest pricing</h1>
-    <p>Every paid Katafract app is unlocked with Enclave ($8/mo) — far cheaper than buying them separately. Infrastructure costs a subscription. Device-side tools are one-time. No surprises.</p>
+  <main>
+    <div class="container">
 
-    <div class="toggle-row">
-      <div class="toggle-pill" role="tablist" aria-label="Billing period">
-        <button class="toggle-btn active" id="btn-monthly" onclick="setBilling('monthly')" role="tab" aria-selected="true">Monthly</button>
-        <button class="toggle-btn" id="btn-annual" onclick="setBilling('annual')" role="tab" aria-selected="false">Annual</button>
+      <!-- Hero -->
+      <div class="pricing-hero">
+        <div class="section-label-sm fm" style="font-size:.65rem;color:#FF006E;letter-spacing:.3em;text-transform:uppercase;margin-bottom:1rem">Pricing</div>
+        <h1>Buy what you need.<br>Nothing you don't.</h1>
+        <p>App-specific pricing. Haven DNS is free. Utility apps are one-time, {fmtUsd(minUtilityUnlock)} to {fmtUsd(maxUtilityUnlock)}. Vaultyx encrypted storage is a subscription that scales by capacity. No platform bundle until WraithVPN ships and we can deliver one we'd buy ourselves.</p>
       </div>
-      <span class="save-badge" id="save-badge">Save 37% annually</span>
-    </div>
-  </div>
 
-  <!-- Plans -->
-  <div class="plans-grid" id="plans-grid">
+      <!-- Plans -->
+      <div class="plans-grid">
 
-    <!-- Apps (one-time) -->
-    <div class="plan-card">
-      <div class="plan-label" style="color:#00F0FF">Standalone</div>
-      <div class="plan-name">Armor Apps</div>
-      <div class="plan-tagline">Device-side privacy tools. Free to try, $0.99–$7.99 one-time, or included with Enclave.</div>
-      <div class="plan-price">
-        <div class="amount" style="color:#00F0FF">from $0.99</div>
-        <div class="period">one-time per app</div>
+        <!-- Armor Apps (one-time) -->
+        <div class="plan-card">
+          <div class="plan-label" style="color:#00F0FF">Standalone apps</div>
+          <div class="plan-name">Armor Apps</div>
+          <div class="plan-tagline">Device-side privacy tools. Free to try, {fmtUsd(minUtilityUnlock)}–{fmtUsd(maxUtilityUnlock)} one-time. No subscription.</div>
+          <div class="plan-price">
+            <div class="amount" style="color:#00F0FF">from {fmtUsd(minUtilityUnlock)}</div>
+            <div class="period">one-time per app</div>
+          </div>
+          <ul class="plan-features">
+            <li><span class="check" style="color:#00F0FF">✓</span> ExifArmor — strip photo metadata · {fmtUsd(APP_UNLOCK_PRICES.exifarmor.unlock_usd!)} unlock</li>
+            <li><span class="check" style="color:#00F0FF">✓</span> ParkArmor — parking saver · {fmtUsd(APP_UNLOCK_PRICES.parkarmor.unlock_usd!)} unlock</li>
+            <li><span class="check" style="color:#00F0FF">✓</span> DocArmor — encrypted ID vault · {fmtUsd(APP_UNLOCK_PRICES.docarmor.unlock_usd!)} unlock</li>
+            <li><span class="check" style="color:#00F0FF">✓</span> SafeOpen — link inspector · Free + credits</li>
+            <li><span class="check" style="color:#00F0FF">✓</span> Everything stays on your device</li>
+            <li><span class="check" style="color:#00F0FF">✓</span> No account · no logs · no tracking</li>
+          </ul>
+          <a href="/#apps" class="plan-cta cyan">See the apps →</a>
+        </div>
+
+        <!-- Haven (free) -->
+        <div class="plan-card">
+          <div class="plan-label" style="color:#4ADE80">Haven · Always Free</div>
+          <div class="plan-name">Haven DNS</div>
+          <div class="plan-tagline">Encrypted DNS with ad, tracker, and malware blocking. No account, no payment, no logs.</div>
+          <div class="plan-price">
+            <div class="amount" style="color:#4ADE80">Free</div>
+            <div class="period">forever</div>
+          </div>
+          <ul class="plan-features">
+            <li><span class="check" style="color:#4ADE80">✓</span> Encrypted DNS (DoH + DoT)</li>
+            <li><span class="check" style="color:#4ADE80">✓</span> Ad + tracker blocking</li>
+            <li><span class="check" style="color:#4ADE80">✓</span> Malware + phishing domains blocked</li>
+            <li><span class="check" style="color:#4ADE80">✓</span> Works on iOS, Android, macOS, Windows, routers</li>
+            <li><span class="check" style="color:#4ADE80">✓</span> No logs · no account needed</li>
+          </ul>
+          <a href="/dns" class="plan-cta secondary">Set up Haven →</a>
+        </div>
+
+        <!-- Vaultyx (subscription) -->
+        <div class="plan-card featured">
+          <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(255,0,110,.08) 0%,transparent 70%);pointer-events:none"></div>
+          <div class="plan-label" style="color:#FF006E">Vaultyx · Live on iOS</div>
+          <div class="plan-name">Vaultyx</div>
+          <div class="plan-tagline">Encrypted cloud storage we cannot read. Pick a capacity. Subscribe in the app.</div>
+          <div class="plan-price">
+            <div class="amount" style="color:#FF006E">from {fmtUsd(minVaultyxMonthly)}</div>
+            <div class="period">/ month · {VAULTYX_TIERS[0].capacity} to {VAULTYX_TIERS[VAULTYX_TIERS.length - 1].capacity}</div>
+            <div class="annual-note">~{vaultyxAnnualPct}% off with annual billing</div>
+          </div>
+          <ul class="plan-features">
+            <li><span class="check" style="color:#FF006E">✓</span> AES-256-GCM client-side encryption</li>
+            <li><span class="check" style="color:#FF006E">✓</span> Keys live in your iOS Keychain</li>
+            <li><span class="check" style="color:#FF006E">✓</span> 3 datacenters, 2 jurisdictions (US + Canada)</li>
+            <li><span class="check" style="color:#FF006E">✓</span> Standard S3 API at vaultyx.objstore.io</li>
+            <li><span class="check" style="color:#FF006E">✓</span> No content scanning · no AI training</li>
+            <li><span class="check" style="color:#FF006E">✓</span> Cancel anytime in App Store</li>
+          </ul>
+          {vaultyxAppStore && (
+            <a href={vaultyxAppStore} class="plan-cta primary plausible-event-name=AppStore+Click plausible-event-app=vaultyx">Get Vaultyx on the App Store →</a>
+          )}
+          <p style="margin-top:.75rem;text-align:center;font-size:.72rem;color:#4a5060;font-family:'JetBrains Mono',monospace">Subscription handled by Apple — billed via your App Store account</p>
+        </div>
+
+        <!-- Future bundle teaser -->
+        <div class="plan-card future">
+          <div class="plan-label" style="color:#8C94A6">Coming next</div>
+          <div class="plan-name">A platform bundle</div>
+          <div class="plan-tagline">When WraithVPN ships, we'll combine VPN, encrypted storage, and the utility apps into a single subscription that beats buying them separately.</div>
+          <div class="plan-price">
+            <div class="amount" style="color:#8C94A6;font-size:1.5rem">Not yet</div>
+            <div class="period">we'll announce when it's real</div>
+          </div>
+          <ul class="plan-features">
+            <li class="dim"><span class="check">○</span> WraithVPN with global exits</li>
+            <li class="dim"><span class="check">○</span> Vaultyx storage included</li>
+            <li class="dim"><span class="check">○</span> All utility apps unlocked</li>
+            <li class="dim"><span class="check">○</span> Token identity (no email required)</li>
+            <li><span class="check" style="color:#8C94A6">✓</span> Subscribe to ship notifications below</li>
+          </ul>
+          <a href="/#signup" class="plan-cta disabled">Notify me →</a>
+        </div>
+
       </div>
-      <ul class="plan-features">
-        <li><span class="check" style="color:#00F0FF">✓</span> ExifArmor — strip photo metadata · $0.99</li>
-        <li><span class="check" style="color:#00F0FF">✓</span> ParkArmor — parking spot saver · $0.99</li>
-        <li><span class="check" style="color:#00F0FF">✓</span> DocArmor — encrypted vault · $7.99</li>
-        <li><span class="check" style="color:#00F0FF">✓</span> SafeOpen — link inspector · Free + credits</li>
-        <li><span class="check" style="color:#00F0FF">✓</span> No cloud, no account, no tracking</li>
-        <li class="dim"><span class="check">–</span> Network protection</li>
-        <li class="dim"><span class="check">–</span> VPN routing</li>
-      </ul>
-      <a href="/#apps" class="plan-cta secondary">See All Apps →</a>
-    </div>
 
-    <!-- Haven (free) -->
-    <div class="plan-card">
-      <div class="plan-label" style="color:#4ADE80">Haven · Always Free</div>
-      <div class="plan-name">Haven</div>
-      <div class="plan-tagline">Encrypted DNS with ad, tracker, and malware blocking. No account, no payment, no logs.</div>
-      <div class="plan-price">
-        <div class="amount" style="color:#4ADE80">Free</div>
-        <div class="period">forever, included with any tier</div>
+      <!-- Vaultyx capacity tiers -->
+      <div class="vaultyx-tiers">
+        <h3>Vaultyx capacity tiers</h3>
+        <div class="vaultyx-tier-grid">
+          {VAULTYX_TIERS.map((t) => (
+            <div class={`vaultyx-tier${t.featured ? ' featured' : ''}`}>
+              <div class="cap">{t.capacity}</div>
+              <div class="price">{fmtUsd(t.monthly_usd)} / mo</div>
+              <div class="annual">{fmtUsd(t.annual_usd)}/yr — ~{fmtUsd(t.annual_usd / 12).replace('$', '$')}/mo</div>
+            </div>
+          ))}
+        </div>
+        <p style="text-align:center;color:#4a5060;font-size:.78rem;font-family:'JetBrains Mono',monospace;margin-top:1.25rem">All tiers · unlimited bandwidth · S3 API · same encryption · same architecture</p>
       </div>
-      <ul class="plan-features">
-        <li><span class="check" style="color:#4ADE80">✓</span> Encrypted DNS (DoH + DoT)</li>
-        <li><span class="check" style="color:#4ADE80">✓</span> Ad + tracker blocking</li>
-        <li><span class="check" style="color:#4ADE80">✓</span> Malware + phishing domains blocked</li>
-        <li><span class="check" style="color:#4ADE80">✓</span> Works on all devices</li>
-        <li><span class="check" style="color:#4ADE80">✓</span> No logs · No account needed</li>
-        <li class="dim"><span class="check">–</span> VPN routing</li>
-        <li class="dim"><span class="check">–</span> Advanced DNS tiers</li>
-      </ul>
-      <a href="/dns" class="plan-cta secondary" id="cta-haven">Setup Haven →</a>
-    </div>
 
-    <!-- Enclave VPN (2-tier) -->
-    <div class="plan-card featured">
-      <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(255,0,110,.08) 0%,transparent 70%);pointer-events:none"></div>
-      <div class="plan-label" style="color:#FF006E">Enclave · Most Popular</div>
-      <div class="plan-name">Enclave</div>
-      <div class="plan-tagline">Single-hop WireGuard VPN, all utility apps unlocked, 50 AI credits/month, DNS tier picker.</div>
-      <div class="plan-price">
-        <div class="amount monthly-price" style="color:#FF006E">$8</div>
-        <div class="amount annual-price" style="color:#FF006E;display:none">$5.33</div>
-        <div class="period">/ month</div>
-        <div class="annual-note">billed $64/year — save 33%</div>
+      <!-- Free Haven DNS box -->
+      <div class="dns-free-box">
+        <h2>Haven DNS — always free, no account</h2>
+        <p>Basic DNS protection — ad blocking, tracker blocking, malware filtering — at no cost. Just point your DNS to our servers. Nothing to install, no sign-up.</p>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1rem;margin:1.5rem 0">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:1.15rem;color:#4ADE80;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.25);border-radius:8px;padding:.75rem 1.5rem;letter-spacing:.04em">dns.katafract.com</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#8C94A6;letter-spacing:.15em;text-transform:uppercase">iPhone · Android · macOS · Windows · Router</div>
+        </div>
+        <a href="/dns" style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#4ADE80">Setup guide →</a>
       </div>
-      <ul class="plan-features">
-        <li><span class="check" style="color:#FF006E">✓</span> VPN — global nodes (EU, US, Asia)</li>
-        <li><span class="check" style="color:#FF006E">✓</span> Haven DNS (Low/Standard/High/Family)</li>
-        <li><span class="check" style="color:#FF006E">✓</span> ExifArmor, ParkArmor, DocArmor, SafeOpen unlocked</li>
-        <li><span class="check" style="color:#FF006E">✓</span> 50 AI credits/month (MeritMosaic, SafeOpen, future features)</li>
-        <li><span class="check" style="color:#FF006E">✓</span> Connect on 5 devices</li>
-        <li><span class="check" style="color:#FF006E">✓</span> No logs · No identity stored</li>
-      </ul>
-      <a href="https://buy.stripe.com/bJe28r4JX9TcgjocRqffy04" class="plan-cta primary plausible-event-name=Subscribe+Click" id="cta-enclave">Get Enclave →</a>
-      <p style="margin-top:.75rem;text-align:center;font-size:.72rem;color:#4a5060;font-family:'JetBrains Mono',monospace">After checkout → <a href="/welcome" style="color:#8C94A6">katafract.com/welcome</a></p>
-    </div>
 
-    <!-- Add-ons -->
-    <div class="plan-card" style="background:#0a0a14;border:1px solid rgba(100,100,120,.1)">
-      <div class="plan-label" style="color:#FFB700">Add-ons</div>
-      <div class="plan-name">Enhance Your Plan</div>
-      <div class="plan-tagline">Transparent cost-plus pricing on actual infrastructure costs.</div>
-      <div class="plan-price" style="margin-bottom:1.5rem">
-        <div class="amount" style="color:#FFB700;font-size:1.5rem">Flexible</div>
-        <div class="period">by usage or fixed tier</div>
+      <!-- Future bundle context -->
+      <div class="future-bundle-box">
+        <h2>Why no bundle right now</h2>
+        <p>The bundle worth selling is one that includes WraithVPN — encrypted transit, our own exit nodes, no logs. WraithVPN is built and submitted, but Apple's VPN-app program requires us to be a registered business account, and that conversion is still in progress.</p>
+        <p>Until that lands, every app is sold standalone with honest, app-specific pricing. We'd rather wait than sell a bundle missing its anchor.</p>
+        <p class="small">no roadmap promises &middot; no early-bird sign-ups &middot; subscribe to ship notifications below to be told when it lands</p>
       </div>
-      <ul class="plan-features">
-        <li><span class="check" style="color:#FFB700">⚙</span> Storage beyond 1TB: <strong>+$4/mo per TB</strong></li>
-        <li><span class="check" style="color:#FFB700">⚙</span> AI credits top-up: <strong>$5 = 100 credits</strong> (never expire)</li>
-        <li><span class="check" style="color:#FFB700">⚙</span> Multi-hop routing: <strong>included in Sovereign</strong></li>
-        <li><span class="check" style="color:#FFB700">⚙</span> Unlimited devices: <strong>Sovereign only</strong></li>
-        <li class="dim"><span class="check">–</span> No hidden charges</li>
-        <li class="dim"><span class="check">–</span> All prices in USD</li>
-      </ul>
-      <a href="mailto:hello@katafract.com" class="plan-cta ghost">Questions? Email us →</a>
-    </div>
 
-    <!-- Sovereign -->
-    <div class="plan-card featured">
-      <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(255,0,110,.08) 0%,transparent 70%);pointer-events:none"></div>
-      <div class="plan-label" style="color:#FF006E">Sovereign · Complete</div>
-      <div class="plan-name">Sovereign</div>
-      <div class="plan-tagline">Own your data infrastructure. Multi-hop VPN, 1TB encrypted cloud storage, all apps included.</div>
-      <div class="plan-price">
-        <div class="amount monthly-price" style="color:#FF006E">$18</div>
-        <div class="amount annual-price" style="color:#FF006E;display:none">$12</div>
-        <div class="period">/ month</div>
-        <div class="annual-note">billed $144/year — save 33%</div>
+      <!-- FAQ -->
+      <div class="faq">
+        <h2>Questions</h2>
+
+        <div class="faq-item">
+          <div class="faq-q">Why no monthly subscription for the platform yet?</div>
+          <div class="faq-a">The honest answer: WraithVPN — the network piece of the platform — hasn't shipped to the App Store. Apple's VPN-app program requires Katafract LLC to be converted to a business account, and that's still in progress. Selling an "Enclave" subscription before VPN works would be selling a half-product. So we don't.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">How do I pay for Vaultyx?</div>
+          <div class="faq-a">In the iOS app. Subscriptions are managed through your App Store account — Apple handles billing, refunds, and cancellations. {VAULTYX_TIERS.length} capacity tiers: {VAULTYX_TIERS.map((t) => `${t.capacity} (${fmtUsd(t.monthly_usd)}/mo)`).join(', ')}. Annual billing saves ~{vaultyxAnnualPct}%. Switch tiers any time.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Are there logs of what I store?</div>
+          <div class="faq-a">No content logs — we can't see your files, ever. Encryption is client-side; the encryption keys live in your iOS Keychain, not on our servers. We see ciphertext only. We do keep minimal operational metadata (file sizes, request timestamps) to bill capacity and keep the service running.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">What happens if I cancel Vaultyx?</div>
+          <div class="faq-a">Your data stays for a 30-day grace period after cancellation, then is permanently deleted. You can re-subscribe within that window without losing anything. Export anytime via the app or the S3 API at vaultyx.objstore.io.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Do the utility apps need a subscription?</div>
+          <div class="faq-a">No. ExifArmor, ParkArmor, DocArmor, and SafeOpen are standalone iOS apps with one-time unlocks — buy once, own it. SafeOpen has free scans plus optional credit packs (consumed by AI link summaries). No accounts, no recurring billing.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Can I use Haven DNS without paying for anything else?</div>
+          <div class="faq-a">Yes — Haven is free, forever, no account required. Install the DNS profile from <a href="/dns">/dns</a> and it works on every device that supports DoH/DoT. You don't need to be a Katafract customer of any other product.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">When will WraithVPN ship and the bundle launch?</div>
+          <div class="faq-a">We don't commit to dates we don't control. The Apple business-account conversion is in process; WraithVPN is built, tested, and uploaded; the bundle pricing is mostly designed. When the conversion clears and Apple approves, we'll announce — not before.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Where is my data stored?</div>
+          <div class="faq-a">Vaultyx files are encrypted on your device, then replicated across 3 datacenters: Vint Hill (Virginia, US), Beauharnois (Canada), and our Contabo node (US). That's 2 jurisdictions, replication factor 2 — every block exists in at least 2 zones. A regional outage doesn't lose your files. No EU node yet — we don't pretend otherwise.</div>
+        </div>
+
       </div>
-      <ul class="plan-features">
-        <li><span class="check" style="color:#FF006E">✓</span> Everything in Enclave</li>
-        <li><span class="check" style="color:#FF006E">✓</span> Multi-hop VPN routing (double encapsulation)</li>
-        <li><span class="check" style="color:#FF006E">✓</span> Vaultyx — 1TB encrypted storage with FastCDC delta sync</li>
-        <li><span class="check" style="color:#FF006E">✓</span> DocArmor cloud backup included</li>
-        <li><span class="check" style="color:#FF006E">✓</span> Praetor (when shipping) + all future apps</li>
-        <li><span class="check" style="color:#FF006E">✓</span> Unlimited devices · Cross-device sync</li>
-      </ul>
-      <a href="https://buy.stripe.com/7sY9ATekx1mG2sydVuffy0h"  class="plan-cta primary plausible-event-name=Subscribe+Click" id="cta-sovereign">Get Sovereign →</a>
-      <p style="margin-top:.75rem;text-align:center;font-size:.72rem;color:#4a5060;font-family:'JetBrains Mono',monospace">After checkout → <a href="/welcome" style="color:#8C94A6">katafract.com/welcome</a></p>
+
     </div>
+  </main>
 
-  </div>
-
-  <!-- Free Haven DNS -->
-  <div class="dns-free-box">
-    <h2>Haven DNS — always free, no account</h2>
-    <p>Basic DNS protection — ad blocking, tracker blocking — is available without a subscription. Just point your DNS to our servers. Nothing to install, no sign-up.</p>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:1rem;margin:1.5rem 0">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:1.15rem;color:#4ADE80;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.25);border-radius:8px;padding:.75rem 1.5rem;letter-spacing:.04em">dns.katafract.com</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#8C94A6;letter-spacing:.15em;text-transform:uppercase">Works on iPhone · Android · macOS · Routers</div>
-    </div>
-    <a href="/dns" style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#4ADE80">Setup guide →</a>
-  </div>
-
-  <!-- Vaultyx comparison -->
-  <div class="compare-table">
-    <h2>Vaultyx vs Competitors</h2>
-    <p style="text-align:center;color:#8C94A6;font-size:.9rem;margin-bottom:2rem;">Sovereign includes Vaultyx with 1TB storage, plus VPN, DNS, and DocArmor cloud backup</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Feature</th>
-          <th style="color:#FF006E">Vaultyx</th>
-          <th style="color:#8C94A6">iCloud+</th>
-          <th style="color:#8C94A6">Dropbox</th>
-          <th style="color:#8C94A6">Google One</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>Client-side encryption (default)</td><td class="yes-mag">AES-256-GCM, always on</td><td class="no">Server-side by default¹ (E2EE opt-in via ADP²)</td><td class="no">Server-side only³</td><td class="no">Server-side only⁴</td></tr>
-        <tr><td>Can provider read files?</td><td class="yes-mag">Never — we have no keys</td><td class="no">Yes, by default¹ (No with ADP²)</td><td class="no">Yes, Dropbox can³</td><td class="no">Yes, Google can⁴</td></tr>
-        <tr><td>Automated content scanning</td><td class="yes-mag">None — keys never leave your device</td><td class="no">Server-side abuse detection⁵</td><td class="no">Automated abuse detection³</td><td class="no">Automated abuse detection⁶</td></tr>
-        <tr><td>Delta sync</td><td class="yes-mag">FastCDC — only changed chunks</td><td class="no">Full re-upload</td><td class="yes">Block-level delta sync⁷</td><td class="no">Full re-upload</td></tr>
-        <tr><td>VPN routing integration</td><td class="yes-mag">Auto routes via WraithVPN</td><td class="no">None</td><td class="no">None</td><td class="no">None</td></tr>
-        <tr><td>No proprietary lock-in</td><td class="yes-mag">Open format — ciphertext is yours</td><td class="no">Proprietary Apple format</td><td class="no">Proprietary Dropbox format</td><td class="no">Proprietary Google format</td></tr>
-        <tr><td>Comparable storage / monthly price</td><td class="yes-mag">$18/mo — 1TB + VPN + DNS + apps</td><td class="no">$9.99/mo — 2TB⁸ (storage only, no 1TB tier)</td><td class="no">$11.99/mo — 2TB⁹ (storage only, no 1TB tier)</td><td class="no">$9.99/mo — 2TB¹⁰ (storage only, no 1TB tier)</td></tr>
-      </tbody>
-    </table>
-    <div class="compare-refs" style="margin-top:1.5rem;padding:1rem 1.5rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;font-size:.78rem;color:#8C94A6;line-height:1.8">
-      <p style="margin:0 0 .5rem;font-weight:600;color:#6B7280;text-transform:uppercase;letter-spacing:.08em;font-size:.7rem">Sources — retrieved 2026-04-24</p>
-      <p style="margin:.25rem 0">¹ Apple iCloud Standard Data Protection — Apple holds encryption keys server-side by default. <a href="https://support.apple.com/en-us/102651" target="_blank" rel="noopener" style="color:#6B7280">support.apple.com/en-us/102651</a></p>
-      <p style="margin:.25rem 0">² Advanced Data Protection (ADP) is an opt-in setting that enables end-to-end encryption where only your trusted devices hold keys. Not enabled by default. <a href="https://support.apple.com/en-us/102651" target="_blank" rel="noopener" style="color:#6B7280">support.apple.com/en-us/102651</a></p>
-      <p style="margin:.25rem 0">³ Dropbox uses AES-256 server-managed encryption. Dropbox can access file contents and deploys automated abuse detection per their privacy policy. <a href="https://www.dropbox.com/privacy" target="_blank" rel="noopener" style="color:#6B7280">dropbox.com/privacy</a></p>
-      <p style="margin:.25rem 0">⁴ Google One storage is encrypted server-side with keys Google manages. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:#6B7280">policies.google.com/privacy</a></p>
-      <p style="margin:.25rem 0">⁵ Apple can scan iCloud content it holds keys for (Standard Data Protection) for abuse and safety purposes. Files under Advanced Data Protection are not accessible to Apple. <a href="https://www.apple.com/child-safety/" target="_blank" rel="noopener" style="color:#6B7280">apple.com/child-safety</a></p>
-      <p style="margin:.25rem 0">⁶ Google deploys automated systems to detect ToS violations. Google's privacy policy explicitly states Drive, Gmail, and Photos content is not used for personalized advertising. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:#6B7280">policies.google.com/privacy</a></p>
-      <p style="margin:.25rem 0">⁷ Dropbox uses block-level delta sync: only changed chunks of a file are re-uploaded. <a href="https://en.wikipedia.org/wiki/Dropbox_(service)" target="_blank" rel="noopener" style="color:#6B7280">en.wikipedia.org/wiki/Dropbox_(service)</a></p>
-      <p style="margin:.25rem 0">⁸ iCloud+ has no 1TB tier. Tiers: 200GB ($2.99/mo) → 2TB ($9.99/mo). <a href="https://www.apple.com/icloud/" target="_blank" rel="noopener" style="color:#6B7280">apple.com/icloud</a></p>
-      <p style="margin:.25rem 0">⁹ Dropbox Plus: 2TB at $11.99/mo (monthly billing) or $9.99/mo (annual). No 1TB tier. <a href="https://www.dropbox.com/plans" target="_blank" rel="noopener" style="color:#6B7280">dropbox.com/plans</a></p>
-      <p style="margin:.25rem 0">¹⁰ Google One has no 1TB tier. Plans: 100GB ($1.99/mo) → 2TB ($9.99/mo). <a href="https://one.google.com/about/plans" target="_blank" rel="noopener" style="color:#6B7280">one.google.com/about/plans</a></p>
-    </div>
-  </div>
-
-  <!-- Feature comparison -->
-  <div class="compare-table">
-    <h2>Full comparison</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Feature</th>
-          <th style="color:#00F0FF">Apps</th>
-          <th style="color:#4ADE80">Haven</th>
-          <th style="color:#FF006E">Enclave</th>
-          <th style="color:#FFB700">Add-ons</th>
-          <th style="color:#FF006E">Sovereign</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>Ad + tracker blocking</td><td class="no">—</td><td class="yes">✓</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td></tr>
-        <tr><td>Malware domain blocking</td><td class="no">—</td><td class="yes">✓</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td></tr>
-        <tr><td>Enclave VPN</td><td class="no">—</td><td class="no">—</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td></tr>
-        <tr><td>Global exit nodes</td><td class="no">—</td><td class="no">—</td><td class="yes-mag">EU, US, Asia</td><td class="yes-mag">EU, US, Asia</td><td class="yes-mag">EU, US, Asia</td></tr>
-        <tr><td>Multi-hop routing (double encapsulation)</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes-mag">✓</td></tr>
-        <tr><td>Vaultyx encrypted storage</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes-mag">1TB</td></tr>
-        <tr><td>FastCDC delta sync</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes-mag">✓</td></tr>
-        <tr><td>Alias Guard <span style="font-size:.7rem;opacity:.5">(coming soon)</span></td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
-        <tr><td>Exposure alerts</td><td class="no">—</td><td class="no">—</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td></tr>
-        <tr><td>No identity stored</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td></tr>
-        <tr><td>No logs</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td></tr>
-        <tr><td>iOS app</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td></tr>
-        <tr><td>Android app</td><td class="no">—</td><td class="no">—</td><td class="yes-mag">coming soon</td><td class="yes-mag">coming soon</td><td class="yes-mag">coming soon</td></tr>
-        <tr><td>Mac + Windows (config file)</td><td class="no">—</td><td class="no">—</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td><td class="yes-mag">✓</td></tr>
-        <tr><td>Devices included</td><td class="yes">unlimited</td><td class="yes">unlimited</td><td class="yes-mag">5</td><td class="no">+$4/mo per extra</td><td class="yes-mag">unlimited</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- FAQ -->
-  <div class="faq">
-    <h2>Questions</h2>
-
-    <div class="faq-item">
-      <div class="faq-q">Do you log my connections or DNS queries?</div>
-      <div class="faq-a">No. We store no connection logs, no DNS query logs, no IP addresses. The token you use to authenticate is stored as a one-way hash — we cannot reverse it to identify you. By design, we have nothing to hand over.</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">What happens if I reinstall the app or lose my token?</div>
-      <div class="faq-a">For Stripe subscribers, use the recovery flow at connect.katafract.com — enter your subscription ID and we'll send a recovery link to your receipt email. For App Store purchases, your token is tied to your Apple transaction ID and can be re-issued automatically on reinstall.</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">How do I use this on Windows or Linux?</div>
-      <div class="faq-a">Visit connect.katafract.com, paste your subscription token, and download a WireGuard .conf file or scan the QR code. Import it into the WireGuard app (available on all platforms). No extra software needed.</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">What payment methods do you accept?</div>
-      <div class="faq-a">Card (Visa, Mastercard, Amex), Apple Pay, Google Pay, and SEPA/BACS direct debit for EU and UK customers. In-app purchases via the App Store or Google Play use their respective payment systems. Crypto payment (Monero, Lightning) is available for maximum privacy.</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">Can I cancel anytime?</div>
-      <div class="faq-a">Yes. Cancel through the customer portal, the App Store, or by emailing support@katafract.com. Your access continues until the end of the billing period. There's a 7-day grace period on failed payments before cancellation.</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">Where are the VPN nodes?</div>
-      <div class="faq-a">Currently: Nuremberg (Germany), Helsinki (Finland), Singapore, Tokyo (Japan), Mumbai (India), Ashburn (US East), Portland (US West), and Newark (US East-2). Additional regions are added as the network grows. The Enclave app shows real-time latency so you always connect to the fastest node for your location.</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">I paid for Enclave. Now what?</div>
-      <div class="faq-a"><ol style="margin: 0; padding-left: 1.5rem; color: #8C94A6;">
-        <li style="margin-bottom: 0.5rem;"><strong>Install WraithVPN</strong> from the <a href="/apps/wraith#appstore">App Store</a></li>
-        <li style="margin-bottom: 0.5rem;"><strong>Get your token</strong> from your Stripe receipt or email</li>
-        <li style="margin-bottom: 0;"><strong>Go to <a href="https://connect.katafract.com">connect.katafract.com</a></strong> and paste your token — it auto-activates across every Katafract app that uses App Group <code>group.com.katafract.enclave</code>. If you subscribe directly in the iOS app instead, this is done automatically.</li>
-      </ol></div>
-    </div>
-
-  </div>
-
-</div>
-</main>`} />
   <script slot="scripts" is:inline set:html={`
-  let billing = 'monthly';
-  const monthlyLinks = {
-    enclave: 'https://buy.stripe.com/bJe28r4JX9TcgjocRqffy04',
-    sovereign: 'https://buy.stripe.com/7sY9ATekx1mG2sydVuffy0h'
-  };
-  const annualLinks = {
-    enclave: 'https://buy.stripe.com/9B600jfoB9Tcd7cbNmffy05',
-    sovereign: 'https://buy.stripe.com/8x228ra4h1mGaZ4dVuffy0i'
-  };
-
-  function setBilling(mode) {
-    billing = mode;
-    document.getElementById('btn-monthly').classList.toggle('active', mode === 'monthly');
-    document.getElementById('btn-annual').classList.toggle('active', mode === 'annual');
-    document.getElementById('save-badge').style.display = mode === 'annual' ? 'inline' : 'none';
-    document.getElementById('plans-grid').classList.toggle('annual', mode === 'annual');
-
-    document.querySelectorAll('.monthly-price').forEach(el => el.style.display = mode === 'monthly' ? '' : 'none');
-    document.querySelectorAll('.annual-price').forEach(el => el.style.display = mode === 'annual' ? '' : 'none');
-    document.getElementById('cta-enclave').href = mode === 'annual' ? annualLinks.enclave : monthlyLinks.enclave;    document.getElementById('cta-sovereign').href = mode === 'annual' ? annualLinks.sovereign : monthlyLinks.sovereign;
-  }
-
   document.querySelectorAll('.faq-item').forEach(item => {
     item.querySelector('.faq-q').addEventListener('click', () => {
       item.classList.toggle('open');
